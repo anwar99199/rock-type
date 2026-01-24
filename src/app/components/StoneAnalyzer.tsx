@@ -3,7 +3,7 @@ import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Upload, Loader2, Camera } from 'lucide-react';
 import { toast } from 'sonner';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { projectId, publicAnonKey } from '@/utils/supabase/info';
 
 export function StoneAnalyzer() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
