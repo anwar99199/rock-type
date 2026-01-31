@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Gem, Sparkles, Zap, Shield, BookOpen, GraduationCap } from 'lucide-react';
+import { Gem, Sparkles, Zap, Shield, BookOpen, GraduationCap, Map } from 'lucide-react';
 import { Toaster } from 'sonner';
 
 export function LandingPage() {
@@ -170,7 +170,7 @@ export function LandingPage() {
               تعلم التنقيب عن الأحجار
             </h2>
             <p className="text-xl text-emerald-100 mb-8">
-              دليل شامل للمبتدئين: الأدوات، التقنيات، السلامة، وأفضل المواقع في الخليج
+              دليل شامل للمبتدئين: الأدوات، التقنيات، السلامة، وأف��ل المواقع في الخليج
             </p>
             <Link
               to="/learn"
@@ -178,6 +178,26 @@ export function LandingPage() {
             >
               ابدأ التعلم الآن
               <GraduationCap className="size-5" />
+            </Link>
+          </div>
+        </div>
+
+        {/* New Section: Geology Map Teaser */}
+        <div className="max-w-4xl mx-auto mb-20 bg-gradient-to-r from-green-500 to-blue-600 rounded-2xl p-10 text-white">
+          <div className="text-center">
+            <Map className="size-16 mx-auto mb-6 opacity-90" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              خريطة جيولوجية تفاعلية
+            </h2>
+            <p className="text-xl text-green-100 mb-8">
+              استكشف المناطق الغنية بالأحجار الكريمة والمعادن في منطقة الخليج العربي
+            </p>
+            <Link
+              to="/map"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-semibold text-green-600 shadow-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all transform hover:scale-105"
+            >
+              استكشف الخريطة الآن
+              <Map className="size-5" />
             </Link>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router';
-import { Gem, BookOpen, Sparkles, GraduationCap } from 'lucide-react';
+import { Gem, BookOpen, Sparkles, GraduationCap, Map } from 'lucide-react';
 
 export function RootLayout() {
   return (
@@ -39,6 +39,14 @@ export function RootLayout() {
               >
                 <BookOpen className="size-5" />
                 <span className="hidden md:inline text-sm">الموسوعة</span>
+              </Link>
+
+              <Link
+                to="/map"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white bg-green-600 hover:bg-green-700 transition-colors shadow-sm"
+              >
+                <Map className="size-5" />
+                <span className="hidden md:inline text-sm">الخريطة</span>
               </Link>
 
               <Link

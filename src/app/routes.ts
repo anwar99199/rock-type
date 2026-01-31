@@ -4,6 +4,7 @@ import { StonesGallery } from '@/app/components/StonesGallery';
 import { LandingPage } from '@/app/components/LandingPage';
 import { AnalyzePage } from '@/app/pages/AnalyzePage';
 import { LearningPage } from '@/app/pages/LearningPage';
+import { GeologyMap } from '@/app/components/GeologyMap';
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: 'learn',
         Component: LearningPage,
+      },
+      {
+        path: 'map',
+        Component: GeologyMap,
       },
     ],
   },
