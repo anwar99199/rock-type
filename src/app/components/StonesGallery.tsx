@@ -70,36 +70,36 @@ export function StonesGallery() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8 sm:py-12 md:py-16">
-        <div className="container mx-auto px-3 sm:px-4 md:px-6 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">موسوعة الأحجار الكريمة</h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl opacity-90 px-3">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">موسوعة الأحجار الكريمة</h1>
+          <p className="text-lg md:text-xl opacity-90">
             اكتشف 50 نوعاً من الأحجار الكريمة الشائعة في منطقة الخليج
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+      <div className="container mx-auto px-4 py-8">
         {/* Search and Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 md:mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Search */}
             <div className="md:col-span-2 relative">
-              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <Input
                 type="text"
                 placeholder="ابحث عن حجر كريم..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pr-10 text-right text-sm sm:text-base"
+                className="pr-10 text-right"
               />
             </div>
 
             {/* Rarity Filter */}
             <Select value={selectedRarity} onValueChange={setSelectedRarity}>
-              <SelectTrigger className="text-right text-sm sm:text-base">
+              <SelectTrigger className="text-right">
                 <SelectValue placeholder="الندرة" />
               </SelectTrigger>
               <SelectContent>
@@ -112,7 +112,7 @@ export function StonesGallery() {
 
             {/* Value Filter */}
             <Select value={selectedValue} onValueChange={setSelectedValue}>
-              <SelectTrigger className="text-right text-sm sm:text-base">
+              <SelectTrigger className="text-right">
                 <SelectValue placeholder="القيمة" />
               </SelectTrigger>
               <SelectContent>

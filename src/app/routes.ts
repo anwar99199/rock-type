@@ -4,8 +4,7 @@ import { StonesGallery } from '@/app/components/StonesGallery';
 import { LandingPage } from '@/app/components/LandingPage';
 import { AnalyzePage } from '@/app/pages/AnalyzePage';
 import { LearningPage } from '@/app/pages/LearningPage';
-import { CoursesPage } from '@/app/pages/CoursesPage';
-import { CourseDetailPage } from '@/app/pages/CourseDetailPage';
+import { GeologyMap } from '@/app/components/GeologyMap';
 
 export const router = createBrowserRouter([
   {
@@ -29,12 +28,8 @@ export const router = createBrowserRouter([
         Component: LearningPage,
       },
       {
-        path: 'courses',
-        Component: CoursesPage,
-      },
-      {
-        path: 'courses/:courseId',
-        Component: CourseDetailPage,
+        path: 'map',
+        Component: GeologyMap,
       },
     ],
   },
