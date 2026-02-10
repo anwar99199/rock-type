@@ -4,8 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app
 import { Upload, Loader2, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import { projectId, publicAnonKey } from '@/utils/supabase/info';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 export function StoneAnalyzer() {
+  const { t, language, dir } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [analysis, setAnalysis] = useState<string>('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -17,13 +19,13 @@ export function StoneAnalyzer() {
 
     // Check file type
     if (!file.type.startsWith('image/')) {
-      toast.error('الرجاء اختيار صورة صالحة');
+      toast.error(t('analyze.errorInvalidImage'));
       return;
     }
 
     // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('حجم الصورة كبير جداً. الحد الأقصى 5 ميجابايت');
+      toast.error(t('analyze.errorLargeFile'));
       return;
     }
 
@@ -38,7 +40,7 @@ export function StoneAnalyzer() {
 
   const analyzeImage = async () => {
     if (!selectedImage) {
-      toast.error('الرجاء اختيار صورة أولاً');
+      toast.error(t('analyze.errorNoImage'));
       return;
     }
 
@@ -56,27 +58,34 @@ export function StoneAnalyzer() {
           },
           body: JSON.stringify({
             imageBase64: selectedImage,
+            language: language, // Send current language to backend
           }),
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
-        console.error('Error response from server:', data);
-        toast.error(data.error || 'حدث خطأ أثناء تحليل الصورة');
+        const errorData = await response.json().catch(() => ({ error: t('analyze.errorServer') }));
+        console.error('Error response from server:', errorData);
+        toast.error(errorData.error || t('analyze.errorServer'));
         return;
       }
 
-      if (data.success) {
+      const data = await response.json();
+
+      if (data.success && data.analysis) {
         setAnalysis(data.analysis);
-        toast.success('تم تحليل الصورة بنجاح!');
+        toast.success(t('analyze.success'));
       } else {
-        toast.error('فشل تحليل الصورة');
+        console.error('Invalid response format:', data);
+        toast.error(t('analyze.errorServer'));
       }
     } catch (error) {
       console.error('Error analyzing image:', error);
-      toast.error('حدث خطأ في الاتصال بالخادم');
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        toast.error(t('analyze.errorConnection'));
+      } else {
+        toast.error(t('analyze.errorServer'));
+      }
     } finally {
       setIsAnalyzing(false);
     }
@@ -96,10 +105,10 @@ export function StoneAnalyzer() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Camera className="size-6" />
-            رفع صورة الحجر
+            {t('analyze.uploadTitle')}
           </CardTitle>
           <CardDescription>
-            قم برفع صورة واضحة للحجر أو المعدن للتعرف عليه
+            {t('analyze.uploadDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -119,8 +128,8 @@ export function StoneAnalyzer() {
                 className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
               >
                 <Upload className="size-12 text-gray-400 mb-4" />
-                <p className="text-sm text-gray-600 mb-1">انقر لاختيار صورة</p>
-                <p className="text-xs text-gray-500">PNG, JPG أو JPEG (الحد الأقصى 5MB)</p>
+                <p className="text-sm text-gray-600 mb-1">{t('analyze.clickToUpload')}</p>
+                <p className="text-xs text-gray-500">{t('analyze.fileTypes')}</p>
               </label>
             ) : (
               <div className="w-full space-y-4">
@@ -140,10 +149,10 @@ export function StoneAnalyzer() {
                     {isAnalyzing ? (
                       <>
                         <Loader2 className="size-4 ml-2 animate-spin" />
-                        جاري التحليل...
+                        {t('analyze.analyzing')}
                       </>
                     ) : (
-                      'تحليل الصورة'
+                      t('analyze.analyzeBtn')
                     )}
                   </Button>
                   <Button
@@ -151,7 +160,7 @@ export function StoneAnalyzer() {
                     variant="outline"
                     disabled={isAnalyzing}
                   >
-                    صورة جديدة
+                    {t('analyze.newImage')}
                   </Button>
                 </div>
               </div>
@@ -163,11 +172,11 @@ export function StoneAnalyzer() {
       {analysis && (
         <Card>
           <CardHeader>
-            <CardTitle>نتائج التحليل</CardTitle>
-            <CardDescription>معلومات مفصلة عن الحجر أو المعدن</CardDescription>
+            <CardTitle>{t('analyze.results')}</CardTitle>
+            <CardDescription>{t('analyze.resultsDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="prose prose-sm max-w-none text-right" dir="rtl">
+            <div className={`prose prose-sm max-w-none ${dir === 'rtl' ? 'text-right' : 'text-left'}`} dir={dir}>
               <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
                 {analysis}
               </div>
