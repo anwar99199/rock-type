@@ -13,8 +13,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('language');
-    return (saved === 'ar' || saved === 'en') ? saved : 'ar';
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('language');
+      return (saved === 'ar' || saved === 'en') ? saved : 'ar';
+    }
+    return 'ar';
   });
 
   useEffect(() => {
@@ -131,7 +134,7 @@ const translations = {
       cta: {
         title: 'جاهز لاكتشاف كنوزك؟',
         description: 'ابدأ الآن في تحليل أحجارك واكتشف قيمتها الحقيقية',
-        button: 'ابدأ التحليل ��لآن'
+        button: 'ابدأ التحليل لآن'
       },
       footer: 'مدعوم بتقنية OpenAI Vision | جميع الحقوق محفوظة © 2025'
     },

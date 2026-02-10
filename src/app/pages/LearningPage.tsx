@@ -20,10 +20,13 @@ import {
 } from '@/app/components/ui/accordion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Badge } from '@/app/components/ui/badge';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
 export function LearningPage() {
+  const { t, dir } = useLanguage();
+  
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-slate-50 to-blue-50" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-slate-50 to-blue-50" dir={dir}>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl p-12 mb-8 text-center">
@@ -31,10 +34,10 @@ export function LearningPage() {
             <Pickaxe className="size-16" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            دليل تعلم التنقيب عن الأحجار الكريمة
+            {t('learning.title')}
           </h1>
-          <p className="text-xl text-emerald-100 max-w-3xl mx-auto">
-            دليلك الشامل لبدء رحلتك في عالم التنقيب عن الأحجار الكريمة والمعادن النفيسة
+          <p className="text-xl text-emerald-100">
+            {t('learning.subtitle')}
           </p>
         </div>
 
@@ -43,29 +46,28 @@ export function LearningPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <BookOpen className="size-8 text-emerald-600" />
-              مقدمة عن التنقيب
+              {t('learning.introduction.title')}
             </CardTitle>
           </CardHeader>
           <CardContent className="text-right space-y-4">
             <p className="text-lg text-gray-700 leading-relaxed">
-              التنقيب عن الأحجار الكريمة هو فن وعلم يجمع بين المعرفة الجيولوجية والمهارة العملية والصبر. 
-              سواء كنت هاوياً مبتدئاً أو باحثاً جاداً، فإن فهم أساسيات التنقيب سيساعدك على اكتشاف الكنوز الطبيعية المخبأة في باطن الأرض.
+              {t('learning.introduction.description')}
             </p>
             <div className="grid md:grid-cols-3 gap-4 mt-6">
               <div className="bg-emerald-50 p-4 rounded-lg">
                 <CheckCircle className="size-6 text-emerald-600 mb-2" />
-                <h4 className="font-bold mb-1">نشاط ممتع</h4>
-                <p className="text-sm text-gray-600">مغامرة في الطبيعة مع إمكانية اكتشافات مثيرة</p>
+                <h4 className="font-bold mb-1">{t('learning.introduction.benefits.1.title')}</h4>
+                <p className="text-sm text-gray-600">{t('learning.introduction.benefits.1.description')}</p>
               </div>
               <div className="bg-blue-50 p-4 rounded-lg">
                 <CheckCircle className="size-6 text-blue-600 mb-2" />
-                <h4 className="font-bold mb-1">تعليمي</h4>
-                <p className="text-sm text-gray-600">تعلم عن الجيولوجيا والمعادن والأحجار</p>
+                <h4 className="font-bold mb-1">{t('learning.introduction.benefits.2.title')}</h4>
+                <p className="text-sm text-gray-600">{t('learning.introduction.benefits.2.description')}</p>
               </div>
               <div className="bg-purple-50 p-4 rounded-lg">
                 <CheckCircle className="size-6 text-purple-600 mb-2" />
-                <h4 className="font-bold mb-1">مربح محتمل</h4>
-                <p className="text-sm text-gray-600">فرصة للعثور على أحجار ذات قيمة</p>
+                <h4 className="font-bold mb-1">{t('learning.introduction.benefits.3.title')}</h4>
+                <p className="text-sm text-gray-600">{t('learning.introduction.benefits.3.description')}</p>
               </div>
             </div>
           </CardContent>
@@ -76,52 +78,52 @@ export function LearningPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <Pickaxe className="size-8 text-blue-600" />
-              أدوات التنقيب الأساسية
+              {t('learning.tools.title')}
             </CardTitle>
-            <CardDescription>الأدوات التي تحتاجها لبدء رحلة التنقيب</CardDescription>
+            <CardDescription>{t('learning.tools.description')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               {/* Essential Tools */}
               <div>
                 <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                  <Badge className="bg-red-100 text-red-800">ضروري</Badge>
-                  أدوات أساسية
+                  <Badge className="bg-red-100 text-red-800">{t('learning.tools.badges.essential')}</Badge>
+                  {t('learning.tools.sections.essential.title')}
                 </h4>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">معول جيولوجي</h5>
-                      <p className="text-sm text-gray-600">لكسر الصخور واستخراج العينات</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.essential.items.1.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.essential.items.1.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">إزميل وشاكوش</h5>
-                      <p className="text-sm text-gray-600">للعمل الدقيق حول الأحجار</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.essential.items.2.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.essential.items.2.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">نظارات واقية</h5>
-                      <p className="text-sm text-gray-600">لحماية العين من الشظايا</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.essential.items.3.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.essential.items.3.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">قفازات عمل</h5>
-                      <p className="text-sm text-gray-600">لحماية اليدين من الجروح</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.essential.items.4.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.essential.items.4.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-green-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">حقيبة ظهر</h5>
-                      <p className="text-sm text-gray-600">لحمل الأدوات والعينات</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.essential.items.5.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.essential.items.5.description')}</p>
                     </div>
                   </div>
                 </div>
@@ -130,43 +132,43 @@ export function LearningPage() {
               {/* Additional Tools */}
               <div>
                 <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                  <Badge className="bg-blue-100 text-blue-800">مفيد</Badge>
-                  أدوات إضافية
+                  <Badge className="bg-blue-100 text-blue-800">{t('learning.tools.badges.additional')}</Badge>
+                  {t('learning.tools.sections.additional.title')}
                 </h4>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-blue-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">عدسة مكبرة (10x)</h5>
-                      <p className="text-sm text-gray-600">لفحص الأحجار بدقة</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.additional.items.1.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.additional.items.1.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-blue-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">جهاز GPS</h5>
-                      <p className="text-sm text-gray-600">لتحديد المواقع وعدم الضياع</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.additional.items.2.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.additional.items.2.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-blue-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">كشاف قوي</h5>
-                      <p className="text-sm text-gray-600">للبحث في الشقوق والكهوف</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.additional.items.3.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.additional.items.3.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-blue-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">دليل الأحجار</h5>
-                      <p className="text-sm text-gray-600">كتاب للتعرف على الأحجار في الموقع</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.additional.items.4.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.additional.items.4.description')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="size-5 text-blue-600 flex-shrink-0 mt-1" />
                     <div>
-                      <h5 className="font-semibold">أكياس وعلب حفظ</h5>
-                      <p className="text-sm text-gray-600">لتخزين العينات بأمان</p>
+                      <h5 className="font-semibold">{t('learning.tools.sections.additional.items.5.title')}</h5>
+                      <p className="text-sm text-gray-600">{t('learning.tools.sections.additional.items.5.description')}</p>
                     </div>
                   </div>
                 </div>
@@ -180,35 +182,35 @@ export function LearningPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <Compass className="size-8 text-purple-600" />
-              تقنيات البحث والتنقيب
+              {t('learning.techniques.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="text-right text-lg font-semibold">
-                  1. البحث عن المواقع المناسبة
+                  1. {t('learning.techniques.items.1.title')}
                 </AccordionTrigger>
                 <AccordionContent className="text-right space-y-3">
                   <p className="text-gray-700">
-                    اختيار الموقع الصحيح هو نصف النجاح في التنقيب. ابحث عن:
+                    {t('learning.techniques.items.1.description')}
                   </p>
                   <ul className="space-y-2 mr-6">
                     <li className="flex items-start gap-2">
                       <MapPin className="size-5 text-emerald-600 flex-shrink-0 mt-1" />
-                      <span>المناطق الجبلية والوديان القديمة</span>
+                      <span>{t('learning.techniques.items.1.locations.1')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <MapPin className="size-5 text-emerald-600 flex-shrink-0 mt-1" />
-                      <span>مجاري الأنهار الجافة (الوديان)</span>
+                      <span>{t('learning.techniques.items.1.locations.2')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <MapPin className="size-5 text-emerald-600 flex-shrink-0 mt-1" />
-                      <span>المناطق البركانية القديمة</span>
+                      <span>{t('learning.techniques.items.1.locations.3')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <MapPin className="size-5 text-emerald-600 flex-shrink-0 mt-1" />
-                      <span>الشقوق والكهوف الصخرية</span>
+                      <span>{t('learning.techniques.items.1.locations.4')}</span>
                     </li>
                   </ul>
                 </AccordionContent>
@@ -216,37 +218,37 @@ export function LearningPage() {
 
               <AccordionItem value="item-2">
                 <AccordionTrigger className="text-right text-lg font-semibold">
-                  2. فحص الصخور والتربة
+                  2. {t('learning.techniques.items.2.title')}
                 </AccordionTrigger>
                 <AccordionContent className="text-right space-y-3">
                   <p className="text-gray-700">
-                    تعلم كيفية قراءة الإشارات الجيولوجية:
+                    {t('learning.techniques.items.2.description')}
                   </p>
                   <div className="bg-blue-50 p-4 rounded-lg space-y-2">
-                    <p><strong>الصخور المتحولة:</strong> غنية بالأحجار الكريمة مثل الياقوت والزمرد</p>
-                    <p><strong>الصخور النارية:</strong> قد تحتوي على الألماس والعقيق</p>
-                    <p><strong>الصخور الرسوبية:</strong> مصدر للعقيق والأوبال</p>
+                    <p><strong>{t('learning.techniques.items.2.types.1.title')}</strong>: {t('learning.techniques.items.2.types.1.description')}</p>
+                    <p><strong>{t('learning.techniques.items.2.types.2.title')}</strong>: {t('learning.techniques.items.2.types.2.description')}</p>
+                    <p><strong>{t('learning.techniques.items.2.types.3.title')}</strong>: {t('learning.techniques.items.2.types.3.description')}</p>
                   </div>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-3">
                 <AccordionTrigger className="text-right text-lg font-semibold">
-                  3. تقنيات الاستخراج
+                  3. {t('learning.techniques.items.3.title')}
                 </AccordionTrigger>
                 <AccordionContent className="text-right space-y-3">
                   <div className="space-y-4">
                     <div className="border-r-4 border-emerald-600 pr-4">
-                      <h5 className="font-bold mb-2">الحفر السطحي</h5>
-                      <p className="text-gray-600">للأحجار القريبة من السطح، استخدم المعول بعناية</p>
+                      <h5 className="font-bold mb-2">{t('learning.techniques.items.3.methods.1.title')}</h5>
+                      <p className="text-gray-600">{t('learning.techniques.items.3.methods.1.description')}</p>
                     </div>
                     <div className="border-r-4 border-blue-600 pr-4">
-                      <h5 className="font-bold mb-2">التنقيب في الشقوق</h5>
-                      <p className="text-gray-600">استخدم الإزميل لاستخراج الأحجار من الصخور</p>
+                      <h5 className="font-bold mb-2">{t('learning.techniques.items.3.methods.2.title')}</h5>
+                      <p className="text-gray-600">{t('learning.techniques.items.3.methods.2.description')}</p>
                     </div>
                     <div className="border-r-4 border-purple-600 pr-4">
-                      <h5 className="font-bold mb-2">الغسل والتنقية</h5>
-                      <p className="text-gray-600">في مجاري الأنهار، استخدم الغربال لفصل الأحجار عن الرمل</p>
+                      <h5 className="font-bold mb-2">{t('learning.techniques.items.3.methods.3.title')}</h5>
+                      <p className="text-gray-600">{t('learning.techniques.items.3.methods.3.description')}</p>
                     </div>
                   </div>
                 </AccordionContent>
@@ -254,26 +256,26 @@ export function LearningPage() {
 
               <AccordionItem value="item-4">
                 <AccordionTrigger className="text-right text-lg font-semibold">
-                  4. التعرف على الأحجار في الموقع
+                  4. {t('learning.techniques.items.4.title')}
                 </AccordionTrigger>
                 <AccordionContent className="text-right space-y-3">
-                  <p className="text-gray-700">استخدم هذه المؤشرات للتعرف الأولي:</p>
+                  <p className="text-gray-700">{t('learning.techniques.items.4.description')}</p>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h6 className="font-bold mb-2">اللون</h6>
-                      <p className="text-sm text-gray-600">أول مؤشر ولكن قد يكون مضللاً</p>
+                      <h6 className="font-bold mb-2">{t('learning.techniques.items.4.indicators.1.title')}</h6>
+                      <p className="text-sm text-gray-600">{t('learning.techniques.items.4.indicators.1.description')}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h6 className="font-bold mb-2">اللمعان</h6>
-                      <p className="text-sm text-gray-600">زجاجي، معدني، أو باهت</p>
+                      <h6 className="font-bold mb-2">{t('learning.techniques.items.4.indicators.2.title')}</h6>
+                      <p className="text-sm text-gray-600">{t('learning.techniques.items.4.indicators.2.description')}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h6 className="font-bold mb-2">الصلابة</h6>
-                      <p className="text-sm text-gray-600">اختبر بأدوات معروفة الصلابة</p>
+                      <h6 className="font-bold mb-2">{t('learning.techniques.items.4.indicators.3.title')}</h6>
+                      <p className="text-sm text-gray-600">{t('learning.techniques.items.4.indicators.3.description')}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h6 className="font-bold mb-2">الشكل البلوري</h6>
-                      <p className="text-sm text-gray-600">انظر للأشكال الطبيعية</p>
+                      <h6 className="font-bold mb-2">{t('learning.techniques.items.4.indicators.4.title')}</h6>
+                      <p className="text-sm text-gray-600">{t('learning.techniques.items.4.indicators.4.description')}</p>
                     </div>
                   </div>
                 </AccordionContent>
@@ -287,10 +289,10 @@ export function LearningPage() {
           <CardHeader className="bg-red-50">
             <CardTitle className="flex items-center gap-2 text-2xl text-red-800">
               <ShieldAlert className="size-8" />
-              إرشادات السلامة المهمة
+              {t('learning.safety.title')}
             </CardTitle>
             <CardDescription className="text-red-600">
-              سلامتك أولوية! اتبع هذه الإرش��دات دائماً
+              {t('learning.safety.description')}
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
@@ -298,43 +300,43 @@ export function LearningPage() {
               <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
                 <AlertCircle className="size-6 text-red-600 flex-shrink-0" />
                 <div>
-                  <h5 className="font-bold mb-1">لا تذهب بمفردك</h5>
-                  <p className="text-sm text-gray-700">اصطحب دائماً شريكاً أو أخبر أحداً بموقعك</p>
+                  <h5 className="font-bold mb-1">{t('learning.safety.rules.1.title')}</h5>
+                  <p className="text-sm text-gray-700">{t('learning.safety.rules.1.description')}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
                 <AlertCircle className="size-6 text-red-600 flex-shrink-0" />
                 <div>
-                  <h5 className="font-bold mb-1">ارتدِ معدات الحماية</h5>
-                  <p className="text-sm text-gray-700">خوذة، نظارات، قفازات، وأحذية قوية</p>
+                  <h5 className="font-bold mb-1">{t('learning.safety.rules.2.title')}</h5>
+                  <p className="text-sm text-gray-700">{t('learning.safety.rules.2.description')}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
                 <AlertCircle className="size-6 text-red-600 flex-shrink-0" />
                 <div>
-                  <h5 className="font-bold mb-1">احذر من الانهيارات</h5>
-                  <p className="text-sm text-gray-700">تجنب الحفر تحت الصخور غير المستقرة</p>
+                  <h5 className="font-bold mb-1">{t('learning.safety.rules.3.title')}</h5>
+                  <p className="text-sm text-gray-700">{t('learning.safety.rules.3.description')}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
                 <AlertCircle className="size-6 text-red-600 flex-shrink-0" />
                 <div>
-                  <h5 className="font-bold mb-1">احمل ماء كافي</h5>
-                  <p className="text-sm text-gray-700">خاصة في مناطق الخليج الحارة</p>
+                  <h5 className="font-bold mb-1">{t('learning.safety.rules.4.title')}</h5>
+                  <p className="text-sm text-gray-700">{t('learning.safety.rules.4.description')}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
                 <AlertCircle className="size-6 text-red-600 flex-shrink-0" />
                 <div>
-                  <h5 className="font-bold mb-1">تحقق من الطقس</h5>
-                  <p className="text-sm text-gray-700">لا تذهب في حالة الأمطار أو العواصف</p>
+                  <h5 className="font-bold mb-1">{t('learning.safety.rules.5.title')}</h5>
+                  <p className="text-sm text-gray-700">{t('learning.safety.rules.5.description')}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-200">
                 <AlertCircle className="size-6 text-red-600 flex-shrink-0" />
                 <div>
-                  <h5 className="font-bold mb-1">احصل على التصاريح</h5>
-                  <p className="text-sm text-gray-700">تأكد من أن المنطقة مسموح بالتنقيب فيها</p>
+                  <h5 className="font-bold mb-1">{t('learning.safety.rules.6.title')}</h5>
+                  <p className="text-sm text-gray-700">{t('learning.safety.rules.6.description')}</p>
                 </div>
               </div>
             </div>
@@ -346,10 +348,10 @@ export function LearningPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <Map className="size-8 text-orange-600" />
-              مواقع التنقيب في دول الخليج
+              {t('learning.locations.title')}
             </CardTitle>
             <CardDescription>
-              أشهر المناطق المعروفة بالأحجار الكريمة في المنطقة
+              {t('learning.locations.description')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -357,61 +359,61 @@ export function LearningPage() {
               <div className="border-r-4 border-orange-600 pr-4">
                 <h4 className="text-lg font-bold mb-2 flex items-center gap-2">
                   <MapPin className="size-5" />
-                  سلطنة عمان
+                  {t('learning.locations.items.1.title')}
                 </h4>
                 <p className="text-gray-700 mb-2">
-                  من أغنى دول المنطقة بالأحجار الكريمة، خاصة في جبال الحجر
+                  {t('learning.locations.items.1.description')}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Badge>العقيق اليماني</Badge>
-                  <Badge>الكوارتز</Badge>
-                  <Badge>المرجان</Badge>
-                  <Badge>اللؤلؤ</Badge>
+                  <Badge>{t('learning.locations.items.1.gems.1')}</Badge>
+                  <Badge>{t('learning.locations.items.1.gems.2')}</Badge>
+                  <Badge>{t('learning.locations.items.1.gems.3')}</Badge>
+                  <Badge>{t('learning.locations.items.1.gems.4')}</Badge>
                 </div>
               </div>
 
               <div className="border-r-4 border-blue-600 pr-4">
                 <h4 className="text-lg font-bold mb-2 flex items-center gap-2">
                   <MapPin className="size-5" />
-                  المملكة العربية السعودية
+                  {t('learning.locations.items.2.title')}
                 </h4>
                 <p className="text-gray-700 mb-2">
-                  مناطق جبال الحجاز وعسير والشمال غنية بالمعادن
+                  {t('learning.locations.items.2.description')}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Badge>العقيق</Badge>
-                  <Badge>الفيروز</Badge>
-                  <Badge>الكوارتز الوردي</Badge>
+                  <Badge>{t('learning.locations.items.2.gems.1')}</Badge>
+                  <Badge>{t('learning.locations.items.2.gems.2')}</Badge>
+                  <Badge>{t('learning.locations.items.2.gems.3')}</Badge>
                 </div>
               </div>
 
               <div className="border-r-4 border-green-600 pr-4">
                 <h4 className="text-lg font-bold mb-2 flex items-center gap-2">
                   <MapPin className="size-5" />
-                  الإمارات العربية المتحدة
+                  {t('learning.locations.items.3.title')}
                 </h4>
                 <p className="text-gray-700 mb-2">
-                  جبال الحجر في الشمال والمناطق الصحراوية
+                  {t('learning.locations.items.3.description')}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Badge>الكوارتز</Badge>
-                  <Badge>الجرانيت</Badge>
-                  <Badge>اللؤلؤ (تاريخياً)</Badge>
+                  <Badge>{t('learning.locations.items.3.gems.1')}</Badge>
+                  <Badge>{t('learning.locations.items.3.gems.2')}</Badge>
+                  <Badge>{t('learning.locations.items.3.gems.3')}</Badge>
                 </div>
               </div>
 
               <div className="border-r-4 border-purple-600 pr-4">
                 <h4 className="text-lg font-bold mb-2 flex items-center gap-2">
                   <MapPin className="size-5" />
-                  اليمن
+                  {t('learning.locations.items.4.title')}
                 </h4>
                 <p className="text-gray-700 mb-2">
-                  موطن العقيق اليماني الأصلي والأحجار النادرة
+                  {t('learning.locations.items.4.description')}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary">العقيق اليماني</Badge>
-                  <Badge variant="secondary">الجزع</Badge>
-                  <Badge variant="secondary">اللؤلؤ</Badge>
+                  <Badge variant="secondary">{t('learning.locations.items.4.gems.1')}</Badge>
+                  <Badge variant="secondary">{t('learning.locations.items.4.gems.2')}</Badge>
+                  <Badge variant="secondary">{t('learning.locations.items.4.gems.3')}</Badge>
                 </div>
               </div>
             </div>
@@ -420,7 +422,7 @@ export function LearningPage() {
               <p className="text-sm text-amber-900 flex items-start gap-2">
                 <AlertCircle className="size-5 flex-shrink-0 mt-0.5" />
                 <span>
-                  <strong>تنبيه:</strong> قبل التنقيب في أي منطقة، تأكد من الحصول على التصاريح اللازمة واحترام القوانين المحلية وحقوق الملكية.
+                  <strong>{t('learning.locations.warning.title')}</strong>: {t('learning.locations.warning.description')}
                 </span>
               </p>
             </div>
@@ -432,7 +434,7 @@ export function LearningPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <Lightbulb className="size-8 text-yellow-600" />
-              نصائح للمبتدئين
+              {t('learning.tips.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -443,8 +445,8 @@ export function LearningPage() {
                     <CheckCircle className="size-5 text-green-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold mb-1">ابدأ بمناطق معروفة</h5>
-                    <p className="text-sm text-gray-600">اذهب لمواقع مشهورة بسهولة العثور على الأحجار</p>
+                    <h5 className="font-bold mb-1">{t('learning.tips.items.1.title')}</h5>
+                    <p className="text-sm text-gray-600">{t('learning.tips.items.1.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -452,8 +454,8 @@ export function LearningPage() {
                     <CheckCircle className="size-5 text-green-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold mb-1">انضم لمجموعة</h5>
-                    <p className="text-sm text-gray-600">التعلم من الخبراء يوفر عليك الكثير من الوقت</p>
+                    <h5 className="font-bold mb-1">{t('learning.tips.items.2.title')}</h5>
+                    <p className="text-sm text-gray-600">{t('learning.tips.items.2.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -461,8 +463,8 @@ export function LearningPage() {
                     <CheckCircle className="size-5 text-green-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold mb-1">اقرأ وتعلم</h5>
-                    <p className="text-sm text-gray-600">ادرس الجيولوجيا المحلية وخصائص الأحجار</p>
+                    <h5 className="font-bold mb-1">{t('learning.tips.items.3.title')}</h5>
+                    <p className="text-sm text-gray-600">{t('learning.tips.items.3.description')}</p>
                   </div>
                 </div>
               </div>
@@ -472,8 +474,8 @@ export function LearningPage() {
                     <CheckCircle className="size-5 text-blue-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold mb-1">كن صبوراً</h5>
-                    <p className="text-sm text-gray-600">قد لا تجد شيئاً في أول رحلة، لا تستسلم</p>
+                    <h5 className="font-bold mb-1">{t('learning.tips.items.4.title')}</h5>
+                    <p className="text-sm text-gray-600">{t('learning.tips.items.4.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -481,8 +483,8 @@ export function LearningPage() {
                     <CheckCircle className="size-5 text-blue-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold mb-1">وثّق اكتشافاتك</h5>
-                    <p className="text-sm text-gray-600">احتفظ بسجل للمواقع والأحجار التي وجدتها</p>
+                    <h5 className="font-bold mb-1">{t('learning.tips.items.5.title')}</h5>
+                    <p className="text-sm text-gray-600">{t('learning.tips.items.5.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -490,8 +492,8 @@ export function LearningPage() {
                     <CheckCircle className="size-5 text-blue-600" />
                   </div>
                   <div>
-                    <h5 className="font-bold mb-1">احترم الطبيعة</h5>
-                    <p className="text-sm text-gray-600">لا تترك أثراً سلبياً، احمل نفاياتك معك</p>
+                    <h5 className="font-bold mb-1">{t('learning.tips.items.6.title')}</h5>
+                    <p className="text-sm text-gray-600">{t('learning.tips.items.6.description')}</p>
                   </div>
                 </div>
               </div>
@@ -504,33 +506,33 @@ export function LearningPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <FileText className="size-8 text-indigo-600" />
-              مصادر تعليمية إضافية
+              {t('learning.resources.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <div className="p-4 bg-indigo-50 rounded-lg">
-                <h5 className="font-bold mb-2">📚 كتب مقترحة</h5>
+                <h5 className="font-bold mb-2">📚 {t('learning.resources.sections.books.title')}</h5>
                 <ul className="text-sm text-gray-700 space-y-1 mr-4">
-                  <li>• "دليل الجيولوجيا الميدانية" - للمبتدئين</li>
-                  <li>• "موسوعة الأحجار الكريمة" - مرجع شامل</li>
-                  <li>• "التنقيب عن المعادن والأحجار" - دليل عملي</li>
+                  <li>• "{t('learning.resources.sections.books.items.1.title')}" - {t('learning.resources.sections.books.items.1.description')}</li>
+                  <li>• "{t('learning.resources.sections.books.items.2.title')}" - {t('learning.resources.sections.books.items.2.description')}</li>
+                  <li>• "{t('learning.resources.sections.books.items.3.title')}" - {t('learning.resources.sections.books.items.3.description')}</li>
                 </ul>
               </div>
               <div className="p-4 bg-purple-50 rounded-lg">
-                <h5 className="font-bold mb-2">🌐 مواقع مفيدة</h5>
+                <h5 className="font-bold mb-2">🌐 {t('learning.resources.sections.websites.title')}</h5>
                 <ul className="text-sm text-gray-700 space-y-1 mr-4">
-                  <li>• منتديات هواة الجيولوجيا العربية</li>
-                  <li>• تطبيقات التعرف على الأحجار بالذكاء الاصطناعي</li>
-                  <li>• خرائط جيولوجية تفاعلية للمنطقة</li>
+                  <li>• {t('learning.resources.sections.websites.items.1')}</li>
+                  <li>• {t('learning.resources.sections.websites.items.2')}</li>
+                  <li>• {t('learning.resources.sections.websites.items.3')}</li>
                 </ul>
               </div>
               <div className="p-4 bg-green-50 rounded-lg">
-                <h5 className="font-bold mb-2">👥 المجتمعات والنوادي</h5>
+                <h5 className="font-bold mb-2">👥 {t('learning.resources.sections.communities.title')}</h5>
                 <ul className="text-sm text-gray-700 space-y-1 mr-4">
-                  <li>��� نوادي الجيولوجيا المحلية</li>
-                  <li>• مجموعات التنقيب على مواقع التواصل</li>
-                  <li>• معارض الأحجار الكريمة والمعادن</li>
+                  <li>• {t('learning.resources.sections.communities.items.1')}</li>
+                  <li>• {t('learning.resources.sections.communities.items.2')}</li>
+                  <li>• {t('learning.resources.sections.communities.items.3')}</li>
                 </ul>
               </div>
             </div>
@@ -541,17 +543,17 @@ export function LearningPage() {
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-10 text-center text-white">
           <Pickaxe className="size-16 mx-auto mb-4 opacity-90" />
           <h2 className="text-3xl font-bold mb-4">
-            مستعد لبدء مغامرتك؟
+            {t('learning.callToAction.title')}
           </h2>
           <p className="text-xl text-emerald-100 mb-8">
-            الآن بعد أن تعلمت الأساسيات، حان وقت الانطلاق واكتشاف كنوز الأرض!
+            {t('learning.callToAction.description')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-white text-emerald-600 px-8 py-3 rounded-lg font-bold hover:bg-emerald-50 transition-colors shadow-lg">
-              حمّل قائمة الأدوات PDF
+              {t('learning.callToAction.buttons.1')}
             </button>
             <button className="bg-emerald-800 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-900 transition-colors shadow-lg">
-              انضم لمجتمع المنقبين
+              {t('learning.callToAction.buttons.2')}
             </button>
           </div>
         </div>
@@ -559,8 +561,7 @@ export function LearningPage() {
         {/* Footer Note */}
         <div className="mt-8 p-4 bg-gray-100 rounded-lg text-center">
           <p className="text-sm text-gray-600">
-            <strong>ملاحظة:</strong> التنقيب عن الأحجار الكريمة يتطلب الصبر والممارسة. لا تتوقع نتائج فورية، 
-            واستمتع بالرحلة والتعلم. السلامة دائماً أولاً! 🪨💎
+            <strong>{t('learning.footer.note.title')}</strong>: {t('learning.footer.note.description')}
           </p>
         </div>
       </div>

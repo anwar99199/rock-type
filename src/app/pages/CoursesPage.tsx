@@ -29,7 +29,7 @@ const goldCourses: Course[] = [
   {
     id: 2,
     title: 'أنواع عروق الذهب',
-    description: 'دليل شامل لفهم أنواع عروق الذهب المختلفة وكيفية التعرف عليه�� في الطبيعة',
+    description: 'دليل شامل لفهم أنواع عروق الذهب المختلفة وكيفية التعرف عليه في الطبيعة',
     duration: '12 دقيقة',
     level: 'متوسط',
     videoUrl: 'https://www.youtube.com/embed/YJ56NyWIvEg',
@@ -173,46 +173,46 @@ function CourseCard({ course }: { course: Course }) {
 
 export function CoursesPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white" dir="rtl">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <GraduationCap className="w-12 h-12" />
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8 sm:py-12 md:py-16">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <GraduationCap className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-3 sm:mb-4">
             دروس التنقيب والبحث
           </h1>
-          <p className="text-lg md:text-xl text-center opacity-90 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-center opacity-90 max-w-3xl mx-auto px-3">
             تعلم كيفية البحث عن الذهب والأحجار الكريمة من خلال دروس فيديو احترافية ومتخصصة
           </p>
         </div>
       </div>
 
       {/* Stats Section */}
-      <div className="container mx-auto px-4 -mt-8 mb-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 -mt-6 sm:-mt-8 mb-8 sm:mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-4xl mx-auto">
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <Video className="w-8 h-8 mx-auto mb-2 text-blue-600" />
-              <div className="text-3xl font-bold text-gray-900 mb-1">9</div>
-              <div className="text-sm text-gray-600">دروس فيديو</div>
+            <CardContent className="pt-4 sm:pt-6 pb-4">
+              <Video className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-blue-600" />
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">9</div>
+              <div className="text-xs sm:text-sm text-gray-600">دروس فيديو</div>
             </CardContent>
           </Card>
           
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <Clock className="w-8 h-8 mx-auto mb-2 text-purple-600" />
-              <div className="text-3xl font-bold text-gray-900 mb-1">2.8</div>
-              <div className="text-sm text-gray-600">ساعة محتوى</div>
+            <CardContent className="pt-4 sm:pt-6 pb-4">
+              <Clock className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-purple-600" />
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">2.8</div>
+              <div className="text-xs sm:text-sm text-gray-600">ساعة محتوى</div>
             </CardContent>
           </Card>
           
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <Star className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
-              <div className="text-3xl font-bold text-gray-900 mb-1">100%</div>
-              <div className="text-sm text-gray-600">مجاني</div>
+            <CardContent className="pt-4 sm:pt-6 pb-4">
+              <Star className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-yellow-600" />
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">100%</div>
+              <div className="text-xs sm:text-sm text-gray-600">مجاني</div>
             </CardContent>
           </Card>
         </div>

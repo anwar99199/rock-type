@@ -1,73 +1,72 @@
 import { Link, Outlet } from 'react-router';
 import { Gem, BookOpen, Sparkles, GraduationCap, Video, Languages } from 'lucide-react';
-import { useLanguage } from '@/app/contexts/LanguageContext';
+import { useLanguage, LanguageProvider } from '@/app/contexts/LanguageContext';
 
-export function RootLayout() {
+function RootLayoutContent() {
   const { language, setLanguage, t, dir } = useLanguage();
 
   return (
     <>
       <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm" dir={dir}>
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-4">
+          <div className="flex items-center justify-between gap-1">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Gem className="size-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900 dark:text-white hidden sm:inline">
+            <Link to="/" className="flex items-center gap-1 sm:gap-2 hover:opacity-80 transition-opacity">
+              <Gem className="size-6 sm:size-8 text-blue-600 flex-shrink-0" />
+              <span className="text-sm sm:text-xl font-bold text-gray-900 dark:text-white hidden xs:inline truncate">
                 {language === 'ar' ? 'أداة التعرف على الأحجار' : 'Stone Recognition Tool'}
               </span>
             </Link>
 
             {/* Navigation Links */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2">
               <Link
                 to="/"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
-                <Gem className="size-5" />
-                <span className="hidden md:inline text-sm">{t('nav.home')}</span>
+                <Gem className="size-4 sm:size-5" />
+                <span className="hidden lg:inline text-sm">{t('nav.home')}</span>
               </Link>
               
               <Link
                 to="/analyze"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm"
+                className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm"
               >
-                <Sparkles className="size-5" />
-                <span className="hidden md:inline text-sm">{t('nav.analyze')}</span>
+                <Sparkles className="size-4 sm:size-5" />
+                <span className="hidden lg:inline text-sm">{t('nav.analyze')}</span>
               </Link>
               
               <Link
                 to="/stones"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition-colors shadow-sm"
+                className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-white bg-purple-600 hover:bg-purple-700 transition-colors shadow-sm"
               >
-                <BookOpen className="size-5" />
-                <span className="hidden md:inline text-sm">{t('nav.encyclopedia')}</span>
+                <BookOpen className="size-4 sm:size-5" />
+                <span className="hidden lg:inline text-sm">{t('nav.encyclopedia')}</span>
               </Link>
 
               <Link
                 to="/courses"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white bg-orange-600 hover:bg-orange-700 transition-colors shadow-sm"
+                className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-white bg-orange-600 hover:bg-orange-700 transition-colors shadow-sm"
               >
-                <Video className="size-5" />
-                <span className="hidden md:inline text-sm">{t('nav.courses')}</span>
+                <Video className="size-4 sm:size-5" />
+                <span className="hidden lg:inline text-sm">{t('nav.courses')}</span>
               </Link>
 
               <Link
                 to="/learn"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm"
+                className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm"
               >
-                <GraduationCap className="size-5" />
-                <span className="hidden md:inline text-sm">{t('nav.learning')}</span>
+                <GraduationCap className="size-4 sm:size-5" />
+                <span className="hidden lg:inline text-sm">{t('nav.learning')}</span>
               </Link>
 
               {/* Language Switcher */}
               <button
                 onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-300 dark:border-gray-600"
+                className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-300 dark:border-gray-600"
                 title={language === 'ar' ? 'Switch to English' : 'التبديل للعربية'}
               >
-                <Languages className="size-5" />
-                <span className="text-sm font-medium">{language === 'ar' ? 'EN' : 'عربي'}</span>
+                <span className="text-xs sm:text-sm font-medium">{language === 'ar' ? 'EN' : 'عربي'}</span>
               </button>
             </div>
           </div>
@@ -76,5 +75,13 @@ export function RootLayout() {
 
       <Outlet />
     </>
+  );
+}
+
+export function RootLayout() {
+  return (
+    <LanguageProvider>
+      <RootLayoutContent />
+    </LanguageProvider>
   );
 }

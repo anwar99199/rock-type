@@ -100,14 +100,14 @@ export function StoneAnalyzer() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
+    <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Camera className="size-6" />
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl md:text-2xl">
+            <Camera className="size-5 sm:size-6" />
             {t('analyze.uploadTitle')}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm sm:text-base">
             {t('analyze.uploadDesc')}
           </CardDescription>
         </CardHeader>
@@ -125,30 +125,30 @@ export function StoneAnalyzer() {
             {!selectedImage ? (
               <label
                 htmlFor="image-upload"
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                className="flex flex-col items-center justify-center w-full h-48 sm:h-56 md:h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors active:bg-gray-100"
               >
-                <Upload className="size-12 text-gray-400 mb-4" />
-                <p className="text-sm text-gray-600 mb-1">{t('analyze.clickToUpload')}</p>
-                <p className="text-xs text-gray-500">{t('analyze.fileTypes')}</p>
+                <Upload className="size-10 sm:size-12 text-gray-400 mb-3 sm:mb-4" />
+                <p className="text-xs sm:text-sm text-gray-600 mb-1 px-3 text-center">{t('analyze.clickToUpload')}</p>
+                <p className="text-xs text-gray-500 px-3 text-center">{t('analyze.fileTypes')}</p>
               </label>
             ) : (
-              <div className="w-full space-y-4">
+              <div className="w-full space-y-3 sm:space-y-4">
                 <div className="relative w-full rounded-lg overflow-hidden">
                   <img
                     src={selectedImage}
                     alt="Selected stone"
-                    className="w-full h-auto max-h-96 object-contain bg-gray-100"
+                    className="w-full h-auto max-h-64 sm:max-h-80 md:max-h-96 object-contain bg-gray-100"
                   />
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <Button
                     onClick={analyzeImage}
                     disabled={isAnalyzing}
-                    className="flex-1"
+                    className="flex-1 text-sm sm:text-base py-5 sm:py-6"
                   >
                     {isAnalyzing ? (
                       <>
-                        <Loader2 className="size-4 ml-2 animate-spin" />
+                        <Loader2 className={`size-4 ${dir === 'rtl' ? 'mr-2' : 'ml-2'} animate-spin`} />
                         {t('analyze.analyzing')}
                       </>
                     ) : (
@@ -159,6 +159,7 @@ export function StoneAnalyzer() {
                     onClick={resetAnalyzer}
                     variant="outline"
                     disabled={isAnalyzing}
+                    className="text-sm sm:text-base py-5 sm:py-6"
                   >
                     {t('analyze.newImage')}
                   </Button>
