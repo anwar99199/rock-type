@@ -67,7 +67,7 @@ app.post("/make-server-b2e28bb5/analyze-stone", async (c) => {
 • تقليص الاحتمالات إلى الأكثر منطقية علميًا.
 • تقديم مؤشرات سوقية وقيمة للحجر أو المعدن.
 • تحديد احتمالية تواجد الذهب أو المعادن الثمينة.
-• مساعدة المستخدم على اتخاذ قرار: (هل يستحق الفحص؟ هل هو حجر ثمين؟ هل يُباع؟)
+• مساعدة الم��تخدم على اتخاذ قرار: (هل يستحق الفحص؟ هل هو حجر ثمين؟ هل يُباع؟)
 
 📊 هيكل التقرير (إجباري – لا يجوز الإخلال به):
 
@@ -307,11 +307,184 @@ Make the user feel the analysis is worth the subscription, saves them time and m
     });
 
   } catch (error) {
-    console.log(`Error analyzing stone image: ${error}`);
-    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.log(`Analyze stone error: ${error.message}`);
+    return c.json({ error: "Failed to analyze stone image" }, 500);
+  }
+});
+
+// Plans endpoints
+app.get("/make-server-b2e28bb5/plans", async (c) => {
+  try {
+    // Get all plans from KV store
+    const plans = await kv.getByPrefix("plan:");
+    
+    // If no plans exist, initialize default plans
+    if (!plans || plans.length === 0) {
+      const defaultPlans = [
+        {
+          id: "plan-1m",
+          name: "شهر",
+          nameEn: "1 Month",
+          price_usd: 25,
+          duration_days: 30,
+          features: [
+            "تحليل غير محدود للأحجار",
+            "الوصول لموسوعة الأحجار الكريمة",
+            "دروس التنقيب الكاملة",
+            "دروس الفيديو التعليمية"
+          ],
+          featuresEn: [
+            "Unlimited stone analysis",
+            "Access to gemstone encyclopedia",
+            "Complete mining lessons",
+            "Video tutorials"
+          ],
+          is_active: true
+        },
+        {
+          id: "plan-6m",
+          name: "6 أشهر",
+          nameEn: "6 Months",
+          price_usd: 125,
+          duration_days: 180,
+          features: [
+            "كل مزايا باقة الشهر",
+            "تقارير تحليل احترافية مفصلة",
+            "استشارات جيولوجية متقدمة",
+            "خصم 17% عن السعر العادي",
+            "أولوية في الدعم الفني"
+          ],
+          featuresEn: [
+            "All monthly plan features",
+            "Detailed professional analysis reports",
+            "Advanced geological consultations",
+            "17% discount from regular price",
+            "Priority technical support"
+          ],
+          is_active: true,
+          popular: true
+        },
+        {
+          id: "plan-1y",
+          name: "سنوي",
+          nameEn: "Annual",
+          price_usd: 250,
+          duration_days: 365,
+          features: [
+            "كل مزايا باقة 6 أشهر",
+            "تحليل معملي متقدم للعينات",
+            "دورات تدريبية حصرية",
+            "خصم 17% عن السعر العادي",
+            "مجتمع خاص للمنقبين المحترفين",
+            "تحديثات مستمرة طوال العام"
+          ],
+          featuresEn: [
+            "All 6-month plan features",
+            "Advanced laboratory sample analysis",
+            "Exclusive training courses",
+            "17% discount from regular price",
+            "Private community for professional prospectors",
+            "Continuous updates throughout the year"
+          ],
+          is_active: true
+        }
+      ];
+
+      // Save default plans
+      for (const plan of defaultPlans) {
+        await kv.set(`plan:${plan.id}`, plan);
+      }
+
+      return c.json({ plans: defaultPlans });
+    }
+
+    return c.json({ plans });
+  } catch (error) {
+    console.log(`Get plans error: ${error.message}`);
+    return c.json({ error: "Failed to fetch plans" }, 500);
+  }
+});
+
+// Create subscription endpoint
+app.post("/make-server-b2e28bb5/subscriptions", async (c) => {
+  try {
+    const { user_id, plan_id } = await c.req.json();
+
+    if (!user_id || !plan_id) {
+      return c.json({ error: "Missing user_id or plan_id" }, 400);
+    }
+
+    // Get plan details
+    const plan = await kv.get(`plan:${plan_id}`);
+    if (!plan) {
+      return c.json({ error: "Plan not found" }, 404);
+    }
+
+    // Create subscription
+    const subscriptionId = `sub-${user_id}-${Date.now()}`;
+    const now = new Date();
+    const endDate = new Date(now.getTime() + (plan.duration_days * 24 * 60 * 60 * 1000));
+
+    const subscription = {
+      id: subscriptionId,
+      user_id,
+      plan_id,
+      status: "active",
+      start_at: now.toISOString(),
+      end_at: endDate.toISOString(),
+      created_at: now.toISOString()
+    };
+
+    await kv.set(`subscription:${subscriptionId}`, subscription);
+    await kv.set(`user_subscription:${user_id}`, subscriptionId);
+
+    console.log(`Subscription created: ${subscriptionId} for user: ${user_id}`);
+    return c.json({ subscription });
+  } catch (error) {
+    console.log(`Create subscription error: ${error.message}`);
+    return c.json({ error: "Failed to create subscription" }, 500);
+  }
+});
+
+// Get user's active subscription
+app.get("/make-server-b2e28bb5/subscriptions/:userId", async (c) => {
+  try {
+    const userId = c.req.param("userId");
+
+    // Get user's subscription ID
+    const subscriptionId = await kv.get(`user_subscription:${userId}`);
+    if (!subscriptionId) {
+      return c.json({ subscription: null });
+    }
+
+    // Get subscription details
+    const subscription = await kv.get(`subscription:${subscriptionId}`);
+    if (!subscription) {
+      return c.json({ subscription: null });
+    }
+
+    // Check if subscription is still active
+    const now = new Date();
+    const endDate = new Date(subscription.end_at);
+
+    if (now > endDate) {
+      // Subscription expired, update status
+      subscription.status = "expired";
+      await kv.set(`subscription:${subscriptionId}`, subscription);
+    }
+
+    // Get plan details
+    const plan = await kv.get(`plan:${subscription.plan_id}`);
+
     return c.json({ 
-      error: `Error analyzing stone: ${errorMessage}`
-    }, 500);
+      subscription: {
+        ...subscription,
+        plan
+      }
+    });
+  } catch (error) {
+    console.log(`Get subscription error: ${error.message}`);
+    return c.json({ error: "Failed to fetch subscription" }, 500);
   }
 });
 

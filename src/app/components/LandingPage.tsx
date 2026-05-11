@@ -1,10 +1,130 @@
 import { Link } from 'react-router';
-import { Gem, Sparkles, Zap, Shield, BookOpen, GraduationCap, Video } from 'lucide-react';
-import { Toaster } from 'sonner';
+import { Gem, Sparkles, Zap, Shield, BookOpen, GraduationCap, Video, Crown, Check } from 'lucide-react';
+import { useState } from 'react';
+import { toast, Toaster } from 'sonner';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 
+interface Plan {
+  id: string;
+  name: string;
+  nameEn: string;
+  price_usd: string;
+  duration_days: number;
+  durationText: string;
+  durationTextEn: string;
+  popular?: boolean;
+  features: string[];
+  featuresEn: string[];
+}
+
 export function LandingPage() {
-  const { t, dir } = useLanguage();
+  const { t, language, dir } = useLanguage();
+  const [subscribing, setSubscribing] = useState<string | null>(null);
+
+  const plans: Plan[] = [
+    {
+      id: 'monthly',
+      name: 'شهري',
+      nameEn: 'Monthly',
+      price_usd: '$25',
+      duration_days: 30,
+      durationText: 'شهر واحد',
+      durationTextEn: '1 Month',
+      features: [
+        'تحليل غير محدود للأحجار',
+        'الوصول لموسوعة الأحجار الكريمة',
+        'دروس التنقيب الكاملة',
+        'دروس الفيديو التعليمية',
+        'دعم فني على مدار الساعة'
+      ],
+      featuresEn: [
+        'Unlimited stone analysis',
+        'Access to gemstone encyclopedia',
+        'Complete mining lessons',
+        'Educational video courses',
+        '24/7 Technical support'
+      ]
+    },
+    {
+      id: 'quarterly',
+      name: '3 أشهر',
+      nameEn: '3 Months',
+      price_usd: '$60',
+      duration_days: 90,
+      durationText: '3 أشهر',
+      durationTextEn: '3 Months',
+      features: [
+        'تحليل غير محدود للأحجار',
+        'الوصول لموسوعة الأحجار الكريمة',
+        'دروس التنقيب الكاملة',
+        'دروس الفيديو التعليمية',
+        'دعم فني على مدار الساعة',
+        'توفير 20 دولار'
+      ],
+      featuresEn: [
+        'Unlimited stone analysis',
+        'Access to gemstone encyclopedia',
+        'Complete mining lessons',
+        'Educational video courses',
+        '24/7 Technical support',
+        'Save $20'
+      ]
+    },
+    {
+      id: 'yearly',
+      name: 'سنوي',
+      nameEn: 'Yearly',
+      price_usd: '$180',
+      duration_days: 365,
+      durationText: '12 شهر',
+      durationTextEn: '12 Months',
+      popular: true,
+      features: [
+        'تحليل غير محدود للأحجار',
+        'الوصول لموسوعة الأحجار الكريمة',
+        'دروس التنقيب الكاملة',
+        'دروس الفيديو التعليمية',
+        'دعم فني على مدار الساعة',
+        'توفير 120 دولار',
+        'أولوية في الدعم الفني'
+      ],
+      featuresEn: [
+        'Unlimited stone analysis',
+        'Access to gemstone encyclopedia',
+        'Complete mining lessons',
+        'Educational video courses',
+        '24/7 Technical support',
+        'Save $120',
+        'Priority technical support'
+      ]
+    }
+  ];
+
+  const handleSubscribe = async (planId: string) => {
+    setSubscribing(planId);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      toast.success(
+        language === 'ar' 
+          ? 'تم الاشتراك بنجاح! سيتم تحويلك إلى صفحة الدفع...' 
+          : 'Subscription successful! Redirecting to payment...'
+      );
+      
+      // In a real app, redirect to payment gateway
+      console.log('Subscribing to plan:', planId);
+    } catch (error) {
+      toast.error(
+        language === 'ar' 
+          ? 'حدث خطأ أثناء الاشتراك. حاول مرة أخرى.' 
+          : 'Error during subscription. Please try again.'
+      );
+    } finally {
+      setSubscribing(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-purple-50" dir={dir}>
@@ -203,8 +323,74 @@ export function LandingPage() {
           </div>
         </div>
 
+        {/* Plans Section */}
+        <div className="max-w-6xl mx-auto mb-12 sm:mb-16 md:mb-20">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 sm:mb-12">
+            {t('home.plans')}
+          </h2>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            {plans.map(plan => (
+              <div
+                key={plan.id}
+                className={`bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow ${
+                  plan.popular ? 'border-2 border-purple-600' : ''
+                }`}
+              >
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">
+                    {language === 'ar' ? plan.name : plan.nameEn}
+                  </h3>
+                  {plan.popular && (
+                    <div className="bg-purple-100 text-purple-600 rounded-full px-3 py-1 text-sm font-bold">
+                      {t('home.popular')}
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-center mb-4 sm:mb-6">
+                  <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+                    {plan.price_usd}
+                  </div>
+                  <div className="text-sm sm:text-base text-gray-600 ml-2">
+                    / {language === 'ar' ? plan.durationText : plan.durationTextEn}
+                  </div>
+                </div>
+                <ul className="space-y-2 sm:space-y-3 md:space-y-4">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="flex items-center gap-2 sm:gap-3">
+                      <Check className="size-4 sm:size-5 text-green-600" />
+                      <span className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                        {language === 'ar' ? feature : plan.featuresEn[index]}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 sm:mt-6">
+                  <button
+                    onClick={() => handleSubscribe(plan.id)}
+                    className={`w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all transform hover:scale-105 active:scale-95 ${
+                      subscribing === plan.id ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                    disabled={subscribing === plan.id}
+                  >
+                    {subscribing === plan.id ? (
+                      <div className="animate-spin">
+                        <Crown className="size-4 sm:size-5" />
+                      </div>
+                    ) : (
+                      <>
+                        {t('home.subscribeBtn')}
+                        <Sparkles className="size-4 sm:size-5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* CTA Section */}
-        <div className="max-w-4xl mx-auto text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 shadow-2xl">
+        <div className="max-w-4xl mx-auto mb-12 sm:mb-16 md:mb-20 text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 shadow-2xl">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
             {t('home.cta.title')}
           </h2>

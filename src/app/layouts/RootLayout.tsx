@@ -1,8 +1,8 @@
 import { Link, Outlet } from 'react-router';
-import { Gem, BookOpen, Sparkles, GraduationCap, Video, Languages } from 'lucide-react';
-import { useLanguage, LanguageProvider } from '@/app/contexts/LanguageContext';
+import { Gem, BookOpen, Sparkles, GraduationCap, Video } from 'lucide-react';
+import { useLanguage } from '@/app/contexts/LanguageContext';
 
-function RootLayoutContent() {
+export function RootLayout() {
   const { language, setLanguage, t, dir } = useLanguage();
 
   return (
@@ -75,13 +75,5 @@ function RootLayoutContent() {
 
       <Outlet />
     </>
-  );
-}
-
-export function RootLayout() {
-  return (
-    <LanguageProvider>
-      <RootLayoutContent />
-    </LanguageProvider>
   );
 }

@@ -38,76 +38,86 @@ const goldCourses: Course[] = [
   },
   {
     id: 3,
-    title: 'استخدام جهاز كشف المعادن للذهب',
-    description: 'دليل شامل لاختيار واستخدام أجهزة كشف المعادن المتخصصة في البحث عن الذهب',
+    title: 'كيفية البحث ومعرفة أنواع الصخور',
+    description: 'دليل شامل للتعرف على أنواع الصخور المختلفة وتقنيات البحث عن المعادن والأحجار الثمينة في التكوينات الصخرية',
     duration: '20 دقيقة',
     level: 'متوسط',
-    videoUrl: 'https://www.youtube.com/embed/NgEwFnfaNJw',
-    thumbnail: 'https://images.unsplash.com/photo-1609705528142-1b30c88b308b?w=800',
-    topics: ['أنواع الأجهزة', 'إعدادات الجهاز', 'تقنيات المسح']
+    videoUrl: 'https://www.youtube.com/embed/e52OwzEV1fE',
+    thumbnail: '/src/imports/a.png',
+    topics: ['تصنيف الصخور', 'التعرف على الصخور الحاملة للمعادن', 'تقنيات البحث الميداني', 'الخصائص الجيولوجية']
   },
   {
     id: 4,
-    title: 'التنقيب في الأودية والأنهار',
-    description: 'تقنيات البحث عن الذهب الغريني في مجاري الأنهار والأودية الجافة',
+    title: 'كيف نعرف أن منطقة ما تحتوي على الذهب؟ العلامات السطحية',
+    description: 'دليل عملي للتعرف على المؤشرات والعلامات الظاهرة على سطح الأرض التي تدل على احتمالية وجود الذهب في المنطقة',
     duration: '18 دقيقة',
     level: 'متوسط',
-    videoUrl: 'https://www.youtube.com/embed/yHXvWq1ytC0',
+    videoUrl: 'https://www.youtube.com/embed/pNwvzJHTJVg',
     thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-    topics: ['الذهب الغريني', 'تقنيات الغسل', 'قراءة التضاريس']
+    topics: ['العلامات السطحية للذهب', 'قراءة التضاريس', 'المؤشرات البصرية', 'تحليل الصخور']
   },
   {
     id: 5,
-    title: 'المناطق الواعدة في الخليج العربي',
-    description: 'استكشاف المناطق التاريخية والواعدة للتنقيب عن الذهب في دول الخليج',
+    title: 'تعلم اكتشاف الصخور الحاملة للذهب',
+    description: 'دليل متخصص للتعرف على خصائص ومميزات الصخور التي تحمل الذهب وكيفية تمييزها في الطبيعة',
     duration: '12 دقيقة',
     level: 'متقدم',
-    videoUrl: 'https://www.youtube.com/embed/Wz_f9B4pPtg',
-    thumbnail: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
-    topics: ['الدرع العربي', 'المناطق المعدنية', 'التصاريح القانونية']
+    videoUrl: 'https://www.youtube.com/embed/l1CXLg1uiNQ',
+    thumbnail: '/src/imports/a-1.png',
+    topics: ['خصائص الصخور الحاملة للذهب', 'المعادن المصاحبة', 'طرق الفحص الميداني', 'العلامات الدالة']
   }
 ];
 
 const gemCourses: Course[] = [
   {
-    id: 6,
-    title: 'مقدمة في الأحجار الكريمة',
-    description: 'تعرف على أنواع الأحجار الكريمة وكيفية التمييز بينها في الطبيعة',
-    duration: '14 دقيقة',
-    level: 'مبتدئ',
-    videoUrl: 'https://www.youtube.com/embed/OzAdzDcGYlo',
-    thumbnail: 'https://images.unsplash.com/photo-1611955167811-4711904bb9f8?w=800',
-    topics: ['أنواع الأحجار', 'الخصائص الفيزيائية', 'التعرف البصري']
-  },
-  {
     id: 7,
-    title: 'العثور على العقيق اليماني',
-    description: 'دليل متخصص للبحث عن العقيق في المناطق الجبلية والصحراوية',
-    duration: '22 دقيقة',
-    level: 'متوسط',
-    videoUrl: 'https://www.youtube.com/embed/mWyKGZ7uf_s',
-    thumbnail: 'https://images.unsplash.com/photo-1611591437611-12b9ad6d9b4c?w=800',
-    topics: ['العقيق اليماني', 'المواقع الشهيرة', 'طرق الاستخراج']
+    title: 'مدخل إلى عالم الأحجار الكريمة: كيف تبدأ؟',
+    description: 'أول درس للبحث عن الأحجار الكريمة: دليل شامل للمبتدئين لبدء رحلتهم في عالم الأحجار الكريمة',
+    duration: '3 دقائق',
+    level: 'مبتدئ',
+    videoUrl: 'https://www.youtube.com/embed/XbBnsT3d2IY',
+    thumbnail: '/src/imports/_.png',
+    topics: ['الأدوات الأساسية للبداية', 'خامات الأحجار الشائعة', 'الخصائص الأساسية', 'إيجاد مرشد محلي']
   },
   {
     id: 8,
-    title: 'تقنيات استخراج الأحجار الكريمة',
-    description: 'تعلم التقنيات الآمنة والفعالة لاستخراج الأحجار من الصخور',
-    duration: '25 دقيقة',
-    level: 'متقدم',
-    videoUrl: 'https://www.youtube.com/embed/FRgqNEBWIJY',
-    thumbnail: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800',
-    topics: ['أدوات الاستخراج', 'تقنيات التكسير', 'السلامة']
+    title: 'أشهر أسماء الأحجار الكريمة للمبتدئين',
+    description: 'دليل تعريفي بأشهر أنواع الأحجار الكريمة وأسمائها ومميزات كل نوع للمبتدئين',
+    duration: '22 دقيقة',
+    level: 'مبتدئ',
+    videoUrl: 'https://www.youtube.com/embed/46Aex5gLjKk',
+    thumbnail: '/src/imports/_-1.png',
+    topics: ['أسماء الأحجار الكريمة', 'أنواع الأحجار الشهيرة', 'مميزات كل حجر', 'التعرف على الأحجار']
   },
   {
     id: 9,
-    title: 'تقييم جودة الأحجار الكريمة',
-    description: 'كيفية تقييم قيمة وجودة الأحجار الكريمة التي تجدها',
-    duration: '16 دقيقة',
+    title: 'كيفية التفريق بين الحجر الطبيعي والصناعي',
+    description: 'دليل عملي لتعلم كيفية التمييز بين الأحجار الكريمة الطبيعية والصناعية باستخدام تقنيات بسيطة',
+    duration: '25 دقيقة',
     level: 'متوسط',
-    videoUrl: 'https://www.youtube.com/embed/CPnRi_OQ3-c',
-    thumbnail: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800',
-    topics: ['معايير التقييم', 'اللون والنقاء', 'القيمة السوقية']
+    videoUrl: 'https://www.youtube.com/embed/UAbU8vG8Vlc',
+    thumbnail: '/src/imports/_-2.png',
+    topics: ['الفرق بين الطبيعي والصناعي', 'طرق الفحص البسيطة', 'علامات الأحجار الطبيعية', 'تجنب الغش']
+  },
+  {
+    id: 10,
+    title: 'أدوات فحص الأحجار الكريمة للمبتدئين',
+    description: 'دليل شامل للأدوات الأساسية المستخدمة في فحص وتحليل الأحجار الكريمة للمبتدئين',
+    duration: '18 دقيقة',
+    level: 'مبتدئ',
+    videoUrl: 'https://www.youtube.com/embed/pn6dJ1iogrY',
+    thumbnail: '/src/imports/_-3.png',
+    topics: ['أدوات الفحص الأساسية', 'كيفية استخدام العدسة', 'أجهزة القياس', 'فحص الأحجار الكريمة']
+  },
+  {
+    id: 11,
+    title: 'طريقة صقل الأحجار الكريمة للمبتدئين',
+    description: 'دليل شامل لتعلم تقنيات وطرق صقل وتلميع الأحجار الكريمة الخام للمبتدئين',
+    duration: '22 دقيقة',
+    level: 'متوسط',
+    videoUrl: 'https://www.youtube.com/embed/mSrTqpXf2QI',
+    thumbnail: '/src/imports/_-4.png',
+    topics: ['تقنيات الصقل', 'أدوات التلميع', 'تحضير الأحجار', 'مراحل الصقل']
   }
 ];
 
@@ -195,7 +205,7 @@ export function CoursesPage() {
           <Card className="text-center">
             <CardContent className="pt-4 sm:pt-6 pb-4">
               <Video className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-blue-600" />
-              <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">9</div>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">11</div>
               <div className="text-xs sm:text-sm text-gray-600">دروس فيديو</div>
             </CardContent>
           </Card>
@@ -203,7 +213,7 @@ export function CoursesPage() {
           <Card className="text-center">
             <CardContent className="pt-4 sm:pt-6 pb-4">
               <Clock className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-purple-600" />
-              <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">2.8</div>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">3.2</div>
               <div className="text-xs sm:text-sm text-gray-600">ساعة محتوى</div>
             </CardContent>
           </Card>
