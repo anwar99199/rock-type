@@ -6,6 +6,7 @@ import { AnalyzePage } from '@/app/pages/AnalyzePage';
 import { LearningPage } from '@/app/pages/LearningPage';
 import { CoursesPage } from '@/app/pages/CoursesPage';
 import { CourseDetailPage } from '@/app/pages/CourseDetailPage';
+import { PaymentReturnPage } from '@/app/pages/PaymentReturnPage';
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,14 @@ export const router = createBrowserRouter([
       {
         path: 'courses/:courseId',
         Component: CourseDetailPage,
+      },
+      {
+        path: 'payment/success',
+        Component: PaymentReturnPage,
+      },
+      {
+        path: 'payment/cancel',
+        Component: PaymentReturnPage,
       },
     ],
   },
