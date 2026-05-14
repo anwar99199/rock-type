@@ -194,7 +194,8 @@ export function AuthModal() {
           {/* Switch mode */}
           <p className="text-center text-sm text-gray-500 mt-5">
             {mode === 'login'
-              ? isAr ? 'ليس لديك حساب؟' : "Don't have an account?"}
+              ? isAr ? 'ليس لديك حساب؟' : "Don't have an account?"
+              : isAr ? 'لديك حساب بالفعل؟' : 'Already have an account?'}
             {' '}
             <button
               type="button"
