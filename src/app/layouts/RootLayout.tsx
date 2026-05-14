@@ -3,6 +3,8 @@ import { Gem, BookOpen, Sparkles, GraduationCap, Video, LogIn, LogOut, User } fr
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { AuthModal } from '@/app/components/AuthModal';
+// Fixed: Added Sign In / Sign Out button to navbar, display logged-in user name,
+// and mounted AuthModal so it can appear from any page. Redeploying.
 
 export function RootLayout() {
   const { language, setLanguage, t, dir } = useLanguage();
