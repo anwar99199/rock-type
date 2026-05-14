@@ -19,7 +19,8 @@ interface Plan {
   features: string[];
   featuresEn: string[];
 }
-
+// Fixed: Hero "Subscribe Now" now scrolls to plans section, auth gate added on plan buttons,
+// and AmwalPay SmartBox checkout integrated. Redeploying.
 export function LandingPage() {
   const { t, language, dir } = useLanguage();
   const { user, setShowAuthModal, setAuthRedirectPlanId } = useAuth();
