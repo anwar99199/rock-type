@@ -153,7 +153,7 @@ export async function initiateAmwalPayment(options: InitiatePaymentOptions): Pro
     ContactInfoType: 1,
     ReturnUrl: returnUrl,
     CancelUrl: cancelUrl,
-    ReturnUrlMethodType: 'Post',
+    ReturnUrlMethodType: 'Get',
     CheckoutSiteMode: 'offsite',
     IgnoreReceipt: 'false',
     SecureHash: secureHash,
