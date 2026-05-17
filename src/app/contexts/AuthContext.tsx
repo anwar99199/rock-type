@@ -1,5 +1,4 @@
-// Updated: Replaced mock auth with real Supabase Auth (email/password).
-// Users are created in Supabase Auth, profiles saved to profiles table.
+// Updated: Added Google OAuth via Supabase alongside email/password auth.
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { createClient, SupabaseClient, User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -13,7 +12,7 @@ export interface User {
   email: string;
   name: string;
   avatar?: string;
-  provider: 'email';
+  provider: 'email' | 'google';
 }
 
 interface AuthContextType {
@@ -21,6 +20,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   showAuthModal: boolean;
   setShowAuthModal: (show: boolean) => void;
@@ -31,14 +31,16 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 function mapSupabaseUser(su: SupabaseUser): User {
+  const provider = su.app_metadata?.provider === 'google' ? 'google' : 'email';
   return {
     id: su.id,
     email: su.email ?? '',
     name:
-      su.user_metadata?.name ||
       su.user_metadata?.full_name ||
+      su.user_metadata?.name ||
       (su.email ? su.email.split('@')[0] : 'User'),
-    provider: 'email',
+    avatar: su.user_metadata?.avatar_url || su.user_metadata?.picture,
+    provider,
   };
 }
 
@@ -48,16 +50,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authRedirectPlanId, setAuthRedirectPlanId] = useState<string | null>(null);
 
-  // On mount, restore session from Supabase
   useEffect(() => {
+    // Restore any pending plan from localStorage (survives Google OAuth redirect)
+    const pendingPlan = localStorage.getItem('pending_plan_id');
+    if (pendingPlan) setAuthRedirectPlanId(pendingPlan);
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) setUser(mapSupabaseUser(session.user));
       setIsLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
         setUser(mapSupabaseUser(session.user));
+        // If user just signed in via Google and had a pending plan, trigger payment
+        if (event === 'SIGNED_IN') {
+          const planId = localStorage.getItem('pending_plan_id');
+          if (planId) {
+            localStorage.removeItem('pending_plan_id');
+            setAuthRedirectPlanId(null);
+            // Small delay to let the UI settle after OAuth redirect
+            setTimeout(async () => {
+              try {
+                const { initiateAmwalPayment } = await import('@/app/utils/amwalPay');
+                await initiateAmwalPayment({
+                  planId,
+                  userId: session.user.id,
+                  userEmail: session.user.email ?? '',
+                  language: (document.documentElement.lang as 'en' | 'ar') || 'en',
+                  returnUrl: `${window.location.origin}/payment/success?plan=${planId}`,
+                  cancelUrl: `${window.location.origin}/payment/cancel`,
+                });
+              } catch (err) {
+                console.error('Post-Google-login payment failed:', err);
+              }
+            }, 1000);
+          }
+        }
       } else {
         setUser(null);
       }
@@ -92,6 +121,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const loginWithGoogle = async () => {
+    // Store pending plan before redirect so it survives the OAuth flow
+    if (authRedirectPlanId) {
+      localStorage.setItem('pending_plan_id', authRedirectPlanId);
+    }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+    if (error) throw new Error(error.message);
+    // Page will redirect to Google — execution stops here
+  };
+
   const logout = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -104,6 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         login,
         register,
+        loginWithGoogle,
         logout,
         showAuthModal,
         setShowAuthModal,
