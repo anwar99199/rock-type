@@ -1,10 +1,10 @@
+// Fixed: Added Sign In / Sign Out button to navbar, display logged-in user name,
+// and mounted AuthModal so it can appear from any page. Redeploying.
 import { Link, Outlet } from 'react-router';
 import { Gem, BookOpen, Sparkles, GraduationCap, Video, LogIn, LogOut, User } from 'lucide-react';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { AuthModal } from '@/app/components/AuthModal';
-// Fixed: Added Sign In / Sign Out button to navbar, display logged-in user name,
-// and mounted AuthModal so it can appear from any page. Redeploying.
 
 export function RootLayout() {
   const { language, setLanguage, t, dir } = useLanguage();
@@ -62,7 +62,7 @@ export function RootLayout() {
                     </span>
                   </div>
                   <button
-                    onClick={logout}
+                    onClick={() => logout()}
                     title={language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}
                     className="flex items-center gap-1 px-2 sm:px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-50 hover:text-red-600 dark:hover:bg-gray-800 transition-colors border border-gray-300 dark:border-gray-600"
                   >
