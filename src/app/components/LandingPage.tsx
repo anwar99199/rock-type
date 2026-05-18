@@ -19,8 +19,7 @@ interface Plan {
   features: string[];
   featuresEn: string[];
 }
-// Fixed: Hero "Subscribe Now" now scrolls to plans section, auth gate added on plan buttons,
-// and AmwalPay SmartBox checkout integrated. Redeploying.
+
 export function LandingPage() {
   const { t, language, dir } = useLanguage();
   const { user, setShowAuthModal, setAuthRedirectPlanId } = useAuth();
@@ -34,8 +33,8 @@ export function LandingPage() {
       id: 'monthly',
       name: 'شهري',
       nameEn: 'Monthly',
-      price_omr: '0.500',
-      price_display: '0.500 OMR',
+      price_omr: '5.000',
+      price_display: '5.000 OMR',
       duration_days: 30,
       durationText: 'شهر واحد',
       durationTextEn: '1 Month',
@@ -58,8 +57,8 @@ export function LandingPage() {
       id: 'quarterly',
       name: '3 أشهر',
       nameEn: '3 Months',
-      price_omr: '0.750',
-      price_display: '0.750 OMR',
+      price_omr: '9.000',
+      price_display: '9.000 OMR',
       duration_days: 90,
       durationText: '3 أشهر',
       durationTextEn: '3 Months',
@@ -84,8 +83,8 @@ export function LandingPage() {
       id: 'yearly',
       name: 'سنوي',
       nameEn: 'Yearly',
-      price_omr: '1.000',
-      price_display: '1.000 OMR',
+      price_omr: '37.000',
+      price_display: '37.000 OMR',
       duration_days: 365,
       durationText: '12 شهر',
       durationTextEn: '12 Months',
