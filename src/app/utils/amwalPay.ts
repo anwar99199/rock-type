@@ -1,21 +1,20 @@
-// AmwalPay SmartBox Integration
-// UAT Credentials (replace with production values for live)
+// Updated: Switched to LIVE AmwalPay credentials and updated plan prices.
+// MID: 120576 (OMAN JOB PLATFORM)
 
 export const AMWAL_CONFIG = {
-  MID: '194234',
-  TID: '659762',
-  // NOTE: In production, the secure hash MUST be generated server-side.
-  // This key is here only for UAT/demo purposes.
-  SECURE_KEY: '0CD1BA6DBFA349B8538BC5D329A6F26B3249B97D853520807D3038AFF2A22492',
+  MID: '120576',
+  TID: '652956',
+  // NOTE: In production, move hash generation to your backend server.
+  // Never expose this key in client-side code in a real production app.
+  SECURE_KEY: '246D711A0D0A3B077E77A999901A1AD8E4EE797754F7962523C1C46070DA1280',
   CURRENCY_ID: 512, // OMR
-  SCRIPT_URL: 'https://test.amwalpg.com:7443/js/SmartBox.js?v=1.1',
+  SCRIPT_URL: 'https://checkout.amwalpg.com/js/SmartBox.js?v=1.1', // LIVE URL
 };
 
-// Plan pricing in OMR (Omani Rial) - adjusted for UAT (max 1 OMR for test card)
 export const PLAN_PRICES: Record<string, { amount: string; label: string; labelAr: string }> = {
-  monthly: { amount: '0.500', label: 'Monthly Plan', labelAr: 'الخطة الشهرية' },
-  quarterly: { amount: '0.750', label: '3-Month Plan', labelAr: 'خطة 3 أشهر' },
-  yearly: { amount: '1.000', label: 'Yearly Plan', labelAr: 'الخطة السنوية' },
+  monthly:   { amount: '5.000',  label: 'Monthly Plan',   labelAr: 'الخطة الشهرية'   },
+  quarterly: { amount: '9.000',  label: '3-Month Plan',   labelAr: 'خطة 3 أشهر'      },
+  yearly:    { amount: '37.000', label: 'Yearly Plan',    labelAr: 'الخطة السنوية'   },
 };
 
 declare global {
@@ -30,22 +29,18 @@ declare global {
 }
 
 /**
- * Generates HMAC-SHA256 secure hash using Web Crypto API (browser-side).
- * ⚠️ In production, ALWAYS generate this on your backend server.
- * This is for UAT/demo purposes only.
+ * Generates HMAC-SHA256 secure hash using Web Crypto API.
+ * ⚠️ Move this to your backend server before going fully live.
  */
 async function generateSecureHash(params: Record<string, string>): Promise<string> {
-  // Sort alphabetically and build string
   const sorted = Object.keys(params)
     .sort((a, b) => a.localeCompare(b))
     .map((k) => `${k}=${params[k]}`)
     .join('&');
 
-  // Convert hex key to bytes
   const keyHex = AMWAL_CONFIG.SECURE_KEY;
   const keyBytes = new Uint8Array(keyHex.match(/.{1,2}/g)!.map((b) => parseInt(b, 16)));
 
-  // Import key
   const cryptoKey = await crypto.subtle.importKey(
     'raw',
     keyBytes,
@@ -54,11 +49,9 @@ async function generateSecureHash(params: Record<string, string>): Promise<strin
     ['sign']
   );
 
-  // Sign
   const encoder = new TextEncoder();
   const signature = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(sorted));
 
-  // Convert to uppercase hex
   return Array.from(new Uint8Array(signature))
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('')
@@ -66,19 +59,13 @@ async function generateSecureHash(params: Record<string, string>): Promise<strin
 }
 
 /**
- * Load the AmwalPay SmartBox script dynamically
+ * Load the AmwalPay SmartBox script dynamically.
  */
 function loadSmartBoxScript(): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (window.SmartBox) {
-      resolve();
-      return;
-    }
+    if (window.SmartBox) { resolve(); return; }
     const existing = document.getElementById('amwal-smartbox-script');
-    if (existing) {
-      existing.addEventListener('load', () => resolve());
-      return;
-    }
+    if (existing) { existing.addEventListener('load', () => resolve()); return; }
     const script = document.createElement('script');
     script.id = 'amwal-smartbox-script';
     script.src = AMWAL_CONFIG.SCRIPT_URL;
@@ -113,20 +100,14 @@ export async function initiateAmwalPayment(options: InitiatePaymentOptions): Pro
   const planInfo = PLAN_PRICES[planId];
   if (!planInfo) throw new Error(`Unknown plan: ${planId}`);
 
-  // Load SmartBox script
   await loadSmartBoxScript();
-
-  // Wait for SmartBox to initialize
   await new Promise((r) => setTimeout(r, 300));
 
-  if (!window.SmartBox) {
-    throw new Error('SmartBox failed to initialize');
-  }
+  if (!window.SmartBox) throw new Error('SmartBox failed to initialize');
 
-  const merchantReference = `${planId.toUpperCase()}-${userId}-${Date.now()}`;
+  const merchantReference = `${planId.toUpperCase()}-${userId.slice(0, 8)}-${Date.now()}`;
   const trxDateTime = new Date().toISOString();
 
-  // Build hash params (must match exactly what SmartBox sends)
   const hashParams: Record<string, string> = {
     Amount: planInfo.amount,
     CurrencyId: String(AMWAL_CONFIG.CURRENCY_ID),
@@ -139,7 +120,6 @@ export async function initiateAmwalPayment(options: InitiatePaymentOptions): Pro
 
   const secureHash = await generateSecureHash(hashParams);
 
-  // Configure SmartBox
   window.SmartBox.Checkout.configure = {
     MID: AMWAL_CONFIG.MID,
     TID: AMWAL_CONFIG.TID,
@@ -147,7 +127,7 @@ export async function initiateAmwalPayment(options: InitiatePaymentOptions): Pro
     AmountTrxn: planInfo.amount,
     MerchantReference: merchantReference,
     LanguageId: language,
-    PaymentViewType: 1, // Popup
+    PaymentViewType: 1,
     TrxDateTime: trxDateTime,
     SessionToken: '',
     ContactInfoType: 1,
@@ -160,6 +140,5 @@ export async function initiateAmwalPayment(options: InitiatePaymentOptions): Pro
     SmartBoxColorConfig: { PrimaryColor: '#2563EB' },
   };
 
-  // Launch the payment popup
   window.SmartBox.Checkout.showSmartBox();
 }
