@@ -1,6 +1,6 @@
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { Gem, Sparkles, Zap, Shield, BookOpen, GraduationCap, Video, Crown, Check, LogIn } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { toast, Toaster } from 'sonner';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import { useAuth } from '@/app/contexts/AuthContext';
@@ -25,6 +25,16 @@ export function LandingPage() {
   const { user, setShowAuthModal, setAuthRedirectPlanId } = useAuth();
   const [subscribing, setSubscribing] = useState<string | null>(null);
   const plansRef = useRef<HTMLDivElement>(null);
+  const [searchParams] = useSearchParams();
+
+  // Auto-scroll to plans if redirected from AnalyzePage with no subscription
+  useEffect(() => {
+    if (searchParams.get('scrollTo') === 'plans') {
+      setTimeout(() => {
+        plansRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  }, [searchParams]);
 
   const isAr = language === 'ar';
 
