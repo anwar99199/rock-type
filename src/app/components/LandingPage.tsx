@@ -24,6 +24,14 @@ export function LandingPage() {
   const { t, language, dir } = useLanguage();
   const { user, setShowAuthModal, setAuthRedirectPlanId } = useAuth();
   const [subscribing, setSubscribing] = useState<string | null>(null);
+  const [currency, setCurrency] = useState<'OMR' | 'USD'>('OMR');
+  const OMR_TO_USD = 2.60;
+
+  const displayPrice = (omrAmount: string): string => {
+    if (currency === 'OMR') return `${omrAmount} OMR`;
+    const usd = (parseFloat(omrAmount) * OMR_TO_USD).toFixed(2);
+    return `$${usd} USD`;
+  };
   const plansRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
 
@@ -284,7 +292,39 @@ export function LandingPage() {
             {t('home.plans')}
           </h2>
 
-          <div className="flex items-center justify-center mb-8">
+          {/* Currency toggle + exchange rate note */}
+          <div className="flex flex-col items-center gap-3 mb-8">
+            <div className="inline-flex items-center bg-gray-100 rounded-full p-1 gap-1">
+              <button
+                onClick={() => setCurrency('OMR')}
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  currency === 'OMR'
+                    ? 'bg-white text-blue-700 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                🇴🇲 OMR
+              </button>
+              <button
+                onClick={() => setCurrency('USD')}
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  currency === 'USD'
+                    ? 'bg-white text-blue-700 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                🇺🇸 USD
+              </button>
+            </div>
+            <p className="text-xs text-gray-400">
+              {currency === 'USD'
+                ? isAr
+                  ? '1 ريال عماني = 2.60 دولار أمريكي • الدفع يتم بالريال العماني'
+                  : '1 OMR = 2.60 USD (indicative) • Payment processed in OMR'
+                : isAr
+                  ? 'الأسعار بالريال العماني'
+                  : 'Prices in Omani Rial'}
+            </p>
             <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-2 shadow-sm text-sm text-gray-600">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
               {isAr ? 'الدفع الآمن عبر AmwalPay' : 'Secure payment via AmwalPay'}
@@ -324,7 +364,7 @@ export function LandingPage() {
                   {plan.popular && <Crown className="size-5 text-purple-600" />}
                 </div>
                 <div className="flex items-baseline justify-center mb-4 sm:mb-6 gap-1 flex-wrap">
-                  <div className="text-2xl sm:text-3xl font-bold text-gray-900">{plan.price_display}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-gray-900">{displayPrice(plan.price_omr)}</div>
                   <div className="text-sm text-gray-500">/ {isAr ? plan.durationText : plan.durationTextEn}</div>
                 </div>
                 <ul className="space-y-2 sm:space-y-3 mb-6">
