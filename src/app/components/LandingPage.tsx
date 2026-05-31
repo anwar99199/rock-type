@@ -5,6 +5,7 @@ import { toast, Toaster } from 'sonner';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { initiateAmwalPayment } from '@/app/utils/amwalPay';
+import { PaymentSuccessModal } from '@/app/components/PaymentSuccessModal';
 
 interface Plan {
   id: string;
@@ -32,6 +33,7 @@ export function LandingPage() {
     const usd = (parseFloat(omrAmount) * OMR_TO_USD).toFixed(2);
     return `$${usd} USD`;
   };
+
   const plansRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
 
@@ -145,8 +147,6 @@ export function LandingPage() {
         userId: user.id,
         userEmail: user.email,
         language: language as 'en' | 'ar',
-        returnUrl: `${window.location.origin}/?payment=success&plan=${planId}`,
-        cancelUrl: `${window.location.origin}/?payment=cancelled`,
       });
     } catch (error: any) {
       console.error('Payment error:', error);
@@ -163,6 +163,7 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-purple-50" dir={dir}>
       <div className="container mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
+
         {/* Hero Section */}
         <div className="max-w-6xl mx-auto mb-12 sm:mb-16 md:mb-20">
           <div className="max-w-4xl mx-auto text-center">
@@ -425,6 +426,9 @@ export function LandingPage() {
           <p>{t('home.footer')}</p>
         </footer>
       </div>
+
+      {/* Payment success modal — shown after AmwalPay redirects back */}
+      <PaymentSuccessModal />
       <Toaster position="top-center" theme="light" />
     </div>
   );
