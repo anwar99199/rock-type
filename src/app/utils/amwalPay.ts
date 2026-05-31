@@ -1,20 +1,25 @@
-// Updated: Switched to LIVE AmwalPay credentials and updated plan prices.
-// MID: 120576 (OMAN JOB PLATFORM)
+// Updated: Return URL changed to root path with query params.
+// This avoids 404 on Vercel SPA deployments where /payment/success
+// is not a real server-side route.
 
 export const AMWAL_CONFIG = {
   MID: '120576',
   TID: '652956',
-  // NOTE: In production, move hash generation to your backend server.
-  // Never expose this key in client-side code in a real production app.
   SECURE_KEY: '246D711A0D0A3B077E77A999901A1AD8E4EE797754F7962523C1C46070DA1280',
   CURRENCY_ID: 512, // OMR
-  SCRIPT_URL: 'https://checkout.amwalpg.com/js/SmartBox.js?v=1.1', // LIVE URL
+  SCRIPT_URL: 'https://checkout.amwalpg.com/js/SmartBox.js?v=1.1',
 };
 
 export const PLAN_PRICES: Record<string, { amount: string; label: string; labelAr: string }> = {
-  monthly:   { amount: '5.000',  label: 'Monthly Plan',   labelAr: 'الخطة الشهرية'   },
-  quarterly: { amount: '9.000',  label: '3-Month Plan',   labelAr: 'خطة 3 أشهر'      },
-  yearly:    { amount: '37.000', label: 'Yearly Plan',    labelAr: 'الخطة السنوية'   },
+  monthly:   { amount: '5.000',  label: 'Monthly Plan',  labelAr: 'الخطة الشهرية' },
+  quarterly: { amount: '9.000',  label: '3-Month Plan',  labelAr: 'خطة 3 أشهر'    },
+  yearly:    { amount: '37.000', label: 'Yearly Plan',   labelAr: 'الخطة السنوية' },
+};
+
+export const PLAN_DURATION_DAYS: Record<string, number> = {
+  monthly: 30,
+  quarterly: 90,
+  yearly: 365,
 };
 
 declare global {
@@ -28,10 +33,6 @@ declare global {
   }
 }
 
-/**
- * Generates HMAC-SHA256 secure hash using Web Crypto API.
- * ⚠️ Move this to your backend server before going fully live.
- */
 async function generateSecureHash(params: Record<string, string>): Promise<string> {
   const sorted = Object.keys(params)
     .sort((a, b) => a.localeCompare(b))
@@ -42,15 +43,10 @@ async function generateSecureHash(params: Record<string, string>): Promise<strin
   const keyBytes = new Uint8Array(keyHex.match(/.{1,2}/g)!.map((b) => parseInt(b, 16)));
 
   const cryptoKey = await crypto.subtle.importKey(
-    'raw',
-    keyBytes,
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
+    'raw', keyBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
   );
 
-  const encoder = new TextEncoder();
-  const signature = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(sorted));
+  const signature = await crypto.subtle.sign('HMAC', cryptoKey, new TextEncoder().encode(sorted));
 
   return Array.from(new Uint8Array(signature))
     .map((b) => b.toString(16).padStart(2, '0'))
@@ -58,9 +54,6 @@ async function generateSecureHash(params: Record<string, string>): Promise<strin
     .toUpperCase();
 }
 
-/**
- * Load the AmwalPay SmartBox script dynamically.
- */
 function loadSmartBoxScript(): Promise<void> {
   return new Promise((resolve, reject) => {
     if (window.SmartBox) { resolve(); return; }
@@ -81,32 +74,32 @@ export interface InitiatePaymentOptions {
   userId: string;
   userEmail?: string;
   language?: 'en' | 'ar';
-  returnUrl?: string;
-  cancelUrl?: string;
 }
 
-/**
- * Initiates an AmwalPay SmartBox checkout popup.
- */
 export async function initiateAmwalPayment(options: InitiatePaymentOptions): Promise<void> {
-  const {
-    planId,
-    userId,
-    language = 'en',
-    returnUrl = `${window.location.origin}/payment/success`,
-    cancelUrl = `${window.location.origin}/payment/cancel`,
-  } = options;
+  const { planId, userId, language = 'en' } = options;
 
   const planInfo = PLAN_PRICES[planId];
   if (!planInfo) throw new Error(`Unknown plan: ${planId}`);
 
   await loadSmartBoxScript();
   await new Promise((r) => setTimeout(r, 300));
-
   if (!window.SmartBox) throw new Error('SmartBox failed to initialize');
 
   const merchantReference = `${planId.toUpperCase()}-${userId.slice(0, 8)}-${Date.now()}`;
   const trxDateTime = new Date().toISOString();
+
+  // Store plan + user info in localStorage so PaymentReturnPage can save subscription
+  localStorage.setItem('pending_payment', JSON.stringify({
+    planId,
+    userId,
+    merchantReference,
+    timestamp: Date.now(),
+  }));
+
+  // Use root URL with query params — works on Vercel SPA without 404
+  const returnUrl = `${window.location.origin}/?payment=success&plan=${planId}`;
+  const cancelUrl = `${window.location.origin}/?payment=cancelled`;
 
   const hashParams: Record<string, string> = {
     Amount: planInfo.amount,
