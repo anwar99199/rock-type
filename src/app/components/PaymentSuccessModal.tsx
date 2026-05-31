@@ -1,8 +1,8 @@
-// PaymentSuccessModal: shown on the homepage when AmwalPay redirects back
-// with ?payment=success. Saves subscription to Supabase and shows thank-you.
-import { useEffect, useState } from 'react';
+// Fixed: Race condition where user was null when payment return URL loaded.
+// Now waits for auth session to restore before saving subscription/payment.
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router';
-import { CheckCircle, X, Sparkles } from 'lucide-react';
+import { CheckCircle, X, Sparkles, Loader } from 'lucide-react';
 import { useAuth, supabase } from '@/app/contexts/AuthContext';
 import { useLanguage } from '@/app/contexts/LanguageContext';
 import { PLAN_DURATION_DAYS, PLAN_PRICES } from '@/app/utils/amwalPay';
@@ -10,35 +10,49 @@ import { PLAN_DURATION_DAYS, PLAN_PRICES } from '@/app/utils/amwalPay';
 export function PaymentSuccessModal() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const { language } = useLanguage();
   const [show, setShow] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [planId, setPlanId] = useState('monthly');
-  const [saved, setSaved] = useState(false);
+  const savedRef = useRef(false); // Use ref so it persists across re-renders
   const isAr = language === 'ar';
 
+  // Step 1: Detect payment=success in URL immediately on mount
   useEffect(() => {
     const paymentParam = searchParams.get('payment');
     const responseCode = searchParams.get('responseCode') || searchParams.get('ResponseCode');
     const planParam = searchParams.get('plan') || 'monthly';
-
     const isSuccess = paymentParam === 'success' || responseCode === '00';
+
     if (!isSuccess) return;
 
     setPlanId(planParam);
     setShow(true);
 
-    // Save subscription to Supabase
-    if (user && !saved) {
-      setSaved(true);
-      saveSubscription(user.id, planParam);
+    // Clean URL immediately so refresh doesn't retrigger
+    navigate('/', { replace: true });
+  }, []); // Only run on mount
+
+  // Step 2: Once auth finishes loading and user is available, save to Supabase
+  // This fires AFTER user is restored from session — fixes the race condition
+  useEffect(() => {
+    if (!show) return;           // Not a payment return
+    if (authLoading) return;     // Still waiting for session to restore
+    if (savedRef.current) return; // Already saved
+
+    if (!user) {
+      // Auth loaded but no user — very unlikely but handle gracefully
+      console.warn('Payment success but no user session found');
+      return;
     }
 
-    // Clean up URL so refreshing doesn't retrigger
-    navigate('/', { replace: true });
-  }, [searchParams, user]);
+    savedRef.current = true;
+    setSaving(true);
+    saveToSupabase(user.id, planId).finally(() => setSaving(false));
+  }, [show, authLoading, user]);
 
-  const saveSubscription = async (userId: string, plan: string) => {
+  const saveToSupabase = async (userId: string, plan: string) => {
     try {
       const pending = localStorage.getItem('pending_payment');
       const pendingData = pending ? JSON.parse(pending) : {};
@@ -48,12 +62,14 @@ export function PaymentSuccessModal() {
       const now = new Date();
       const endAt = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000);
 
-      // Deactivate any existing subscriptions for this user
-      await supabase
+      // Deactivate any existing active subscriptions for this user
+      const { error: deactivateError } = await supabase
         .from('subscriptions')
         .update({ status: 'inactive' })
         .eq('user_id', userId)
         .eq('status', 'active');
+
+      if (deactivateError) console.error('Deactivate error:', deactivateError);
 
       // Insert new active subscription
       const { error: subError } = await supabase.from('subscriptions').insert({
@@ -64,26 +80,32 @@ export function PaymentSuccessModal() {
         end_at: endAt.toISOString(),
       });
 
-      if (subError) console.error('Subscription save error:', subError);
+      if (subError) {
+        console.error('Subscription insert error:', subError);
+      } else {
+        console.log('✅ Subscription saved');
+      }
 
       // Save payment record
-      const txnId = searchParams.get('transactionId') || searchParams.get('TransactionId');
-      const amount = PLAN_PRICES[plan]?.amount || '0';
-
-      await supabase.from('payments').insert({
+      // Note: txnId won't be in searchParams since we navigated away — use pendingData
+      const { error: payError } = await supabase.from('payments').insert({
         user_id: userId,
         plan_id: plan,
-        amount,
+        amount: PLAN_PRICES[plan]?.amount || '0',
         currency: 'OMR',
-        transaction_id: txnId || null,
+        transaction_id: pendingData.transactionId || null,
         merchant_reference: pendingData.merchantReference || null,
-        response_code: searchParams.get('responseCode') || '00',
+        response_code: '00',
         status: 'completed',
       });
 
-      console.log('✅ Subscription and payment saved to Supabase');
+      if (payError) {
+        console.error('Payment insert error:', payError);
+      } else {
+        console.log('✅ Payment saved');
+      }
     } catch (err) {
-      console.error('Failed to save subscription:', err);
+      console.error('Failed to save to Supabase:', err);
     }
   };
 
@@ -93,14 +115,10 @@ export function PaymentSuccessModal() {
     ? PLAN_PRICES[planId]?.labelAr
     : PLAN_PRICES[planId]?.label;
 
-  const handleClose = () => {
-    setShow(false);
-  };
-
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClose} />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShow(false)} />
 
       {/* Modal */}
       <div
@@ -126,7 +144,7 @@ export function PaymentSuccessModal() {
 
         {/* Close button */}
         <button
-          onClick={handleClose}
+          onClick={() => setShow(false)}
           className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
         >
           <X className="size-4" />
@@ -139,8 +157,15 @@ export function PaymentSuccessModal() {
               {isAr ? 'الخطة المفعّلة:' : 'Active Plan:'}
             </p>
             <p className="text-green-700 text-lg font-bold">{planLabel}</p>
-            <p className="text-green-600 text-xs mt-1">
-              {isAr ? 'اشتراكك مفعّل الآن ويمكنك البدء فوراً' : 'Your subscription is now active'}
+            <p className="text-green-600 text-xs mt-1 flex items-center justify-center gap-1">
+              {saving ? (
+                <>
+                  <Loader className="size-3 animate-spin" />
+                  {isAr ? 'جارٍ تفعيل الاشتراك...' : 'Activating subscription...'}
+                </>
+              ) : (
+                isAr ? 'اشتراكك مفعّل الآن ويمكنك البدء فوراً' : 'Your subscription is now active'
+              )}
             </p>
           </div>
 
@@ -151,8 +176,9 @@ export function PaymentSuccessModal() {
           </p>
 
           <button
-            onClick={handleClose}
-            className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl py-3 px-6 hover:from-blue-700 hover:to-purple-700 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+            onClick={() => setShow(false)}
+            disabled={saving}
+            className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl py-3 px-6 hover:from-blue-700 hover:to-purple-700 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
           >
             <Sparkles className="size-5" />
             {isAr ? 'ابدأ الاستخدام الآن' : 'Start Using GeoSton'}
